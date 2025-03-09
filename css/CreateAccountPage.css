@@ -115,3 +115,17 @@
   .form button:hover {
     background-color: #005ce6;
   }
+  nav {
+    display: flex;
+    justify-content: center;
+    gap: 20px; 
+    background-color: #3fb888;
+    padding: 10px;
+  }
+  nav a {
+      color: white;
+      text-decoration: none;
+  }
+  nav a:hover {
+      text-decoration: underline;
+  }
