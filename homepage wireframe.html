@@ -5,72 +5,109 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>JCW Finance</title>
     <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
         nav {
             display: flex;
             justify-content: center;
             gap: 20px; 
             background-color: #3fb888;
             padding: 10px;
-            width: 100vw;
+            width: 100%;
         }
         nav a {
             color: white;
             text-decoration: none;
+            font-size: 1.2em;
         }
         nav a:hover {
             text-decoration: underline;
         }
-        /* .homepage {
-            margin: 0;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            height: 100vh;
-            width: 100vw;
-            background-color: black;
-        } */
+        
         .container {
-            width: 100vw;
-            height: 100vh;
+            width: 100%;
+            min-height: 100vh;
             background: linear-gradient(to right, #3fb888, #95e2a1);
             padding: 20px;
             color: white;
             font-family: Arial, sans-serif;
             display: flex;
             flex-direction: column;
-            justify-content: space-between;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            position: relative;
         }
+        
         h1 {
-            margin: 0;
-            font-size: 3em;
-            font-weight: 300;
+            font-size: 4.5em; 
+            font-weight: bold;
+            letter-spacing: 2px;
         }
+        
         p {
             font-style: italic;
-            text-align: right;
             margin: 0;
         }
-    </style>
-</head>
-<body class="homepage">
-    <div id="top">
-        <nav>
-          <h2><a href="homepage wireframe.html"><strong id="special">HOME</strong></a></h2>
-          <h2><a href="CreateAccountPage.html"><strong>Create Account</strong></a></h2> 
-          <h2><a href="LoginAccountPage.html"><strong>Login</strong></a></h2>
-          <h2><a href="About Us Wireframe.html"><strong>About Us</strong></a></h2>
-          <!-- when more pages come add it here -->
-        </nav>
-    </div>
-    <div class="container">
-        <div>
-            <h1>JCW</h1>
-            <h1>Finance</h1>
-        </div>
-        <p>We're here to help you with the finances of life</p>
-    </div>
-</body>
-<footer>
-    <p>Contact Us: help@JCWFinance.com</p>
-</footer>
-</html>
+        
+        footer {
+            background-color: #3fb888;
+            color: white;
+            text-align: center;
+            padding: 10px;
+            font-size: 1em;
+            position: relative;
+            bottom: 0;
+            width: 100%;
+        }
+
+        /* Loader Animation */
+        .loader {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 75px;
+            height: 100px;
+        }
+
+        .loader__bar {
+            position: absolute;
+            bottom: 0;
+            width: 10px;
+            height: 50%;
+            background: rgb(0, 0, 0);
+            transform-origin: center bottom;
+            box-shadow: 1px 1px 0 rgba(0, 0, 0, 0.2);
+        }
+
+        .loader__bar:nth-child(1) { left: 0px; transform: scale(1, 0.2); animation: barUp1 4s infinite; }
+        .loader__bar:nth-child(2) { left: 15px; transform: scale(1, 0.4); animation: barUp2 4s infinite; }
+        .loader__bar:nth-child(3) { left: 30px; transform: scale(1, 0.6); animation: barUp3 4s infinite; }
+        .loader__bar:nth-child(4) { left: 45px; transform: scale(1, 0.8); animation: barUp4 4s infinite; }
+        .loader__bar:nth-child(5) { left: 60px; transform: scale(1, 1); animation: barUp5 4s infinite; }
+
+        .loader__ball {
+            position: absolute;
+            bottom: 10px;
+            left: 0;
+            width: 10px;
+            height: 10px;
+            background: rgb(44, 143, 255);
+            border-radius: 50%;
+            animation: ball624 4s infinite;
+        }
+
+        @keyframes ball624 {
+            0% { transform: translate(0, 0); }
+            50% { transform: translate(60px, 0); }
+            100% { transform: translate(0, 0); }
+        }
+
+        @keyframes barUp1 {
+            0%, 40% { transform: scale(1, 0.2); }
+            50%,
