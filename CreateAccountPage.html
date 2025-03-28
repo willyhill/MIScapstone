@@ -2,6 +2,7 @@
 <html>
 <head>
   <!-- "git pull, git add . , git commit -m "comment", git push" -->
+  <!-- http://localhost/MIScapstonecopy/CreateAccountPage.html -->
   <title>Create Account Page</title>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -29,14 +30,14 @@
 
   <section id = "section2"> 
     <div class="form-container">
-      <form class="form">
+      <form class="form" action="create_account.php" method="POST">
         <span class="title">Create Your Account</span>
         <div class="form-container">
-          <input type="email" class="input" placeholder="Email">
-          <input type="text" class="input" placeholder="Username">
-          <input type="password" class="input" placeholder="Password">
+          <input type="email" class="input" placeholder="Email" name="email" required>
+          <input type="text" class="input" placeholder="Username" name="username" required>
+          <input type="password" class="input" placeholder="Password" name="password" required>
         </div>
-        <button>Create Account</button>
+        <button type="submit">Create Account</button>
       </form>
       <div class="form-section">
         <p>Already have an account? <a href="LoginAccountPage.html">Sign In</a> </p>
