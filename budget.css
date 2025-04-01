@@ -1,0 +1,195 @@
+.budget-page {
+    font-family: Arial, sans-serif;
+    background-color: #ffffff;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  header {
+    width: 100%;
+  }
+  
+  .nav-bar {
+    display: flex;
+    justify-content: space-between; /* Space between logo, Home button, and profile picture */
+    align-items: center;
+    padding: 0 20px;
+    background-color: #1abc9c; /* Green background */
+    height: 50px; /* Shorter height */
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 1000;
+  }
+  
+  .logo {
+    font-size: 20px;
+    font-weight: bold;
+    color: white; /* White text for the logo */
+    text-decoration: none;
+  }
+  
+  .nav-links {
+    display: flex;
+    justify-content: flex-start; /* Align Home button slightly to the right */
+    flex: 1;
+    list-style: none;
+    margin-left: 200px; /* Move Home button further to the right */
+    padding: 0;
+  }
+  
+  .nav-link {
+    padding: 10px 20px;
+    border: 2px solid white; /* Add border for buttons */
+    background-color: transparent; /* Transparent background */
+    color: white; /* White text for the Home button */
+    font-size: 1rem;
+    border-radius: 4px; /* Match the rounded corners */
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    text-align: center;
+  }
+  
+  .nav-link:hover {
+    background-color: rgba(255, 255, 255, 0.2); /* More distinct hover effect */
+    transform: scale(1.05); /* Slight scaling to emphasize it's clickable */
+  }
+  
+  .profile-menu {
+    position: relative;
+    display: flex;
+    align-items: center;
+    margin-left: 10px; /* Move profile picture slightly to the left */
+  }
+  
+  .profile-pic {
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    cursor: pointer;
+    border: 2px solid white;
+  }
+  
+  .dropdown-menu {
+    display: none;
+    position: absolute;
+    top: 50px;
+    left: 0; /* Align dropdown menu to the profile picture */
+    background-color: white;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    width: 150px;
+    z-index: 1000;
+  }
+  
+  .dropdown-menu a {
+    display: block;
+    padding: 10px;
+    color: #1abc9c;
+    text-decoration: none;
+    font-size: 0.9rem;
+  }
+  
+  .dropdown-menu a:hover {
+    background-color: #f1f1f1;
+  }
+  
+  /* Ensure dropdown stays open when hovering over the dropdown area */
+  .profile-menu:hover .dropdown-menu,
+  .dropdown-menu:hover {
+    display: block;
+  }
+  
+  main {
+    display: flex;
+    justify-content: space-around;
+    width: 90%;
+    margin-top: 70px; /* Adjusted for fixed nav-bar */
+  }
+  
+  .savings-section, .goal-section {
+    background-color: #ecf0f1;
+    padding: 20px;
+    border-radius: 12px;
+    width: 45%;
+  }
+  
+  .chart-placeholder {
+    background-color: #bdc3c7;
+    width: 300px;
+    height: 300px;
+    margin: 0 auto;
+    border-radius: 8px;
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .chart-placeholder::before {
+    content: "Money Saved Over Time";
+    position: absolute;
+    top: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 16px;
+    font-weight: bold;
+    color: #2c3e50;
+  }
+  
+  .goal-placeholder, .goal-date-placeholder {
+    background-color: #bdc3c7;
+    height: 150px;
+    margin-bottom: 10px;
+    border-radius: 8px;
+    position: relative;
+  }
+  
+  .goal-placeholder::before,
+  .goal-date-placeholder::before {
+    content: attr(data-label);
+    position: absolute;
+    top: 10px;
+    left: 15px;
+    font-style: italic;
+    font-size: 16px;
+    color: #2c3e50;
+  }
+  
+  .savings-controls label {
+    display: block;
+    margin-top: 10px;
+  }
+  
+  button {
+    background-color: #1abc9c;
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    cursor: pointer;
+    border-radius: 8px;
+    margin-top: 10px;
+  }
+  
+  /* Footer Links Section */
+  .footer-links-section {
+    text-align: center;
+    padding: 15px 0;
+    background-color: transparent;
+  }
+  
+  .footer-link {
+    color: blue;
+    text-decoration: none;
+    font-size: 1rem;
+  }
+  
+  .footer-link:hover {
+    text-decoration: underline;
+  }
+  
+  

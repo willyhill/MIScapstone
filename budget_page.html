@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="budget.css" />
+  <title>JCW Financials - My Budget</title>
+</head>
+<body>
+  <div class="budget-page">
+    <header>
+      <nav class="nav-bar">
+        <!-- JCW Financials Logo/Button -->
+        <a href="homepage wireframe.html" class="logo">JCW Financials</a>
+        
+        <!-- Home Button -->
+        <ul class="nav-links">
+          <li><a href="#" class="nav-link nav-button">Home</a></li>
+        </ul>
+        
+        <!-- Profile Picture with Dropdown Menu -->
+        <div class="profile-menu">
+          <img src="profile.jpg" alt="Profile" class="profile-pic" />
+          <div class="dropdown-menu">
+            <a href="account.html">Account</a>
+            <a href="settings.html">Settings</a>
+            <a href="logout.html">Logout</a>
+          </div>
+        </div>
+      </nav>
+    </header>
+    <main>
+      <section class="savings-section">
+        <div class="chart-placeholder"></div> <!-- Updated graph section -->
+        <div class="savings-controls">
+          <label>Add To Savings: <input type="number" /></label>
+          <button>Add</button>
+          <label>Remove From Savings: <input type="number" /></label>
+          <button>Remove</button>
+          <label>Change Savings Goal: <input type="number" /></label>
+          <button>Edit</button>
+        </div>
+      </section>
+      <section class="goal-section">
+        <div class="goal-placeholder" data-label="Your Savings Goal"></div>
+        <div class="goal-date-placeholder" data-label="You’ll reach this on..."></div>
+      </section>
+    </main>
+    <footer>
+      <section class="footer-links-section">
+        <a href="#" class="footer-link">About</a> | 
+        <a href="#" class="footer-link">Contact</a>
+      </section>
+    </footer>
+  </div>
+</body>
+</html>
