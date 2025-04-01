@@ -59,10 +59,10 @@
   }
   
   .profile-menu {
-    position: relative;
     display: flex;
     align-items: center;
-    margin-left: 10px; /* Move profile picture slightly to the left */
+    margin-right: 50px; /* Move profile picture further to the left within the nav bar */
+    position: relative;
   }
   
   .profile-pic {
@@ -77,7 +77,7 @@
     display: none;
     position: absolute;
     top: 50px;
-    left: 0; /* Align dropdown menu to the profile picture */
+    right: 0; /* Align dropdown menu to the profile picture */
     background-color: white;
     border: 1px solid #ccc;
     border-radius: 8px;
@@ -191,5 +191,4 @@
   .footer-link:hover {
     text-decoration: underline;
   }
-  
-  
+
