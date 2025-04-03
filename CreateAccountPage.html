@@ -9,41 +9,60 @@
   <link href="css/CreateAccountPage.css" rel="stylesheet">
 </head>
 <body>
-  <div id="top">
-    <nav>
-      <h2><a href="index.html"><strong id="special">HOME</strong></a></h2> 
-      <!-- when more pages come add it here -->
-    </nav>
-  </div>
-
-  <div id="header">
-    <h1>JCW Financials</h1>
-  </div>
-  <section id = "section1">
-    <div class="container">
-      <div class="left">
-        <p>Text about our website and what it offers to users like you.</p>
-        <p>It's free to join so that you can make adulting easier. All your finances in one place.</p>
-      </div>
-      <a href="About Us Wireframe.html">Learn More</a>
-  </section>
-
-  <section id = "section2"> 
-    <div class="form-container">
-      <form class="form" action="create_account.php" method="POST">
-        <span class="title">Create Your Account</span>
-        <div class="form-container">
-          <input type="email" class="input" placeholder="Email" name="email" required>
-          <input type="text" class="input" placeholder="Username" name="username" required>
-          <input type="password" class="input" placeholder="Password" name="password" required>
+  <div class="budget-page">
+    <header>
+      <nav class="nav-bar">
+        <!-- JCW Financials Logo/Button -->
+        <a href="homepage wireframe.html" class="logo">JCW Financials</a>
+        
+        <!-- Home Button -->
+        <ul class="nav-links">
+          <li><a href="index.html" class="nav-link nav-button">Home</a></li>
+        </ul>
+        
+        <!-- Profile Picture with Dropdown Menu -->
+        <div class="profile-menu">
+          <img src="profile.jpg" alt="Profile" class="profile-pic" id="profile-button" />
+          <div class="dropdown-menu" id="dropdown-menu">
+            <a href="account.html">Account</a>
+            <a href="settings.html">Settings</a>
+            <a href="logout.html">Logout</a>
+          </div>
         </div>
-        <button type="submit">Create Account</button>
-      </form>
-      <div class="form-section">
-        <p>Already have an account? <a href="LoginAccountPage.html">Sign In</a> </p>
-      </div>
-    </div>
-  </section>
+      </nav>
+    </header>
 
+    <main>
+      <div id="header">
+        <h1>JCW Financials</h1>
+      </div>
+      <section id="section1">
+        <div class="container">
+          <div class="left">
+            <p>Text about our website and what it offers to users like you.</p>
+            <p>It's free to join so that you can make adulting easier. All your finances in one place.</p>
+          </div>
+          <a href="About Us Wireframe.html">Learn More</a>
+        </div>
+      </section>
+
+      <section id="section2"> 
+        <div class="form-container">
+          <form class="form" action="create_account.php" method="POST">
+            <span class="title">Create Your Account</span>
+            <div class="form-container">
+              <input type="email" class="input" placeholder="Email" name="email" required>
+              <input type="text" class="input" placeholder="Username" name="username" required>
+              <input type="password" class="input" placeholder="Password" name="password" required>
+            </div>
+            <button type="submit">Create Account</button>
+          </form>
+          <div class="form-section">
+            <p>Already have an account? <a href="LoginAccountPage.html">Sign In</a> </p>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
 </body>
 </html>
