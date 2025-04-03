@@ -3,27 +3,44 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="AboutUs.css" />
     <title>About Us - JCW Finance</title>
+    <link rel="stylesheet" href="css/AboutUs.css">
 </head>
 <body>
-    <div id="top">
-        <nav>
-          <h2><a href="index.html"><strong id="special">HOME</strong></a></h2>
-          <h2><a href="CreateAccountPage.html"><strong>Create Account</strong></a></h2> 
-          <h2><a href="LoginAccountPage.html"><strong>Login</strong></a></h2>
-          <h2><a href="About Us Wireframe.html"><strong>About Us</strong></a></h2>
-          <!-- when more pages come add it here -->
-        </nav>
+    <div class="budget-page">
+        <header>
+            <nav class="nav-bar">
+                <!-- JCW Financials Logo/Button -->
+                <a href="homepage wireframe.html" class="logo">JCW Financials</a>
+                
+                <!-- Home Button -->
+                <ul class="nav-links">
+                    <li><a href="index.html" class="nav-link nav-button">Home</a></li>
+                </ul>
+                
+                <!-- Profile Picture with Dropdown Menu -->
+                <div class="profile-menu">
+                    <img src="profile.jpg" alt="Profile" class="profile-pic" id="profile-button" />
+                    <div class="dropdown-menu" id="dropdown-menu">
+                        <a href="account.html">Account</a>
+                        <a href="settings.html">Settings</a>
+                        <a href="logout.html">Logout</a>
+                    </div>
+                </div>
+            </nav>
+        </header>
+        <main>
+            <div class="container">
+                <h1>Who we are...</h1>
+                <h2>Our Vision</h2>
+                <p>
+                    For individuals, college students, and young professionals who need an efficient way to manage their personal finances. 
+                    The JCW Budget is a personal finance system that allows users to track income, expenses, savings, and investments in one place while setting budgets and generating financial reports. 
+                    Unlike traditional spreadsheets and standalone budgeting apps, our product provides an integrated financial management solution to help with goal-setting, making financial planning accessible and engaging.
+                </p>
+            </div>
+        </main>
     </div>
-    <div class="container">
-        <h1>Who we are...</h1>
-        <h2>Our Vision</h2>
-        <p>
-            For individuals, college students, and young professionals who need an efficient way to manage their personal finances. 
-            The JCW Budget is a personal finance system that allows users to track income, expenses, savings, and investments in one place while setting budgets and generating financial reports. 
-            Unlike traditional spreadsheets and standalone budgeting apps, our product provides an integrated financial management solution to help with goal-setting, making financial planning accessible and engaging.
-        </p>
-    </div>
+    <script src="script.js"></script>
 </body>
 </html>
