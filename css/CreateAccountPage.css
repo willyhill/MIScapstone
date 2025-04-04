@@ -112,6 +112,7 @@
   border-radius: 16px;
   background-color: gray;
   color: white;
+  margin-top: 60px; /* Adjust the value as needed */
 }
 
 #section2 {
