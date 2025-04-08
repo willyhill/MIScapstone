@@ -1,47 +1,58 @@
 <?php
-session_start(); // Start the session to store login data if the user is authenticated
+// Start session to store user session data
+session_start();
 
-// Include database connection file
+// Debugging: Print the contents of the $_POST array
+echo '<pre>';
+print_r($_POST);
+echo '</pre>';
+
+// Connect to SQLite database (or create it if it doesn't exist)
 $db = new SQLite3(__DIR__ . '/CapstoneDBbrowserFiles/users.db');
 
+// Check if the database connection was successful
+if ($db) {
+    echo "Connected to the database successfully!<br>";
+} else {
+    echo "Failed to connect to the database.<br>";
+}
+
 // Check if the form was submitted
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    // Get the form data (email and password)
-    $email = $_POST['email'];
-    $password = $_POST['password'];
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    // Get form data
+    $email = $_POST['email'] ?? null;
+    $password = $_POST['password'] ?? null;
 
-    // Escape the input to prevent SQL Injection
-    $email = $db->escapeString($email);
-    $password = $db->escapeString($password);
+    // Validate input
+    if (empty($email) || empty($password)) {
+        echo "All fields are required.";
+        exit;
+    }
 
-    // Check if email and password are not empty
-    if (!empty($email) && !empty($password)) {
-        // Query to check if the user exists in the database
-        $query = "SELECT * FROM users WHERE email = '$email' LIMIT 1";
-        $result = $db->query($query);
+    // Query the database for the user by email
+    $stmt = $db->prepare('SELECT * FROM users WHERE email = :email');
+    $stmt->bindValue(':email', $email, SQLITE3_TEXT);
+    $result = $stmt->execute();
+    
+    // Check if user exists
+    $user = $result->fetchArray(SQLITE3_ASSOC);
 
-        if ($user = $result->fetchArray(SQLITE3_ASSOC)) {
-            // User exists, verify the password
-            if (password_verify($password, $user['password'])) {
-                // Password matches, store user info in session variables
-                $_SESSION['user_id'] = $user['id'];
-                $_SESSION['user_email'] = $user['email'];
-                $_SESSION['user_name'] = $user['username'];
+    if ($user) {
+        // Verify the password
+        if (password_verify($password, $user['password'])) {
+            // Password is correct, start a session
+            $_SESSION['user_id'] = $user['id']; // Store user ID in session
+            $_SESSION['email'] = $user['email']; // Optionally store email
 
-                // Redirect to homepage (or any other protected page)
-                header("Location: homepage_wireframe.html");
-                exit;
-            } else {
-                // Password is incorrect
-                $error_message = "Invalid email or password.";
-            }
+            // Redirect to the budget page
+            header('Location: budget_page.php'); // Replace with actual budget page URL
+            exit; // Ensure no further code is executed
         } else {
-            // User not found
-            $error_message = "No account found with that email.";
+            echo "Invalid password.";
         }
     } else {
-        // Email or password is empty
-        $error_message = "Please enter both email and password.";
+        echo "User not found.";
     }
 }
 ?>
+

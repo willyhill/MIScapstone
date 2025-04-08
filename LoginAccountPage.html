@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html>
 <head>
@@ -13,12 +12,12 @@
       <nav class="nav-bar">
         <!-- JCW Financials Logo/Button -->
         <a href="homepage_wireframe.html" class="logo">JCW Financials</a>
-        
+
         <!-- Home Button -->
         <ul class="nav-links">
           <li><a href="index.html" class="nav-link nav-button">Home</a></li>
         </ul>
-        
+
         <!-- Profile Picture with Dropdown Menu -->
         <div class="profile-menu">
           <img src="profile.jpg" alt="Profile" class="profile-pic" id="profile-button" />
@@ -44,14 +43,19 @@
       <div class="form-container">
         <form class="form" action="login_account.php" method="POST">
           <span class="title">Login Account</span>
-          
-          <?php
-          // Display error message if there is one
-          if (isset($error_message)) {
-              echo "<p class='error'>$error_message</p>";
-          }
-          ?>
 
-          <div class="form-container">
-            <input type="email" class="input" placeholder="Email" name="email" required>
-            <input type
+          <!-- Email Input -->
+          <input type="email" class="input" placeholder="Email" name="email" required>
+
+          <!-- Password Input -->
+          <input type="password" class="input" placeholder="Password" name="password" required>
+
+          <!-- Submit Button -->
+          <button type="submit" class="submit-button">Login</button>
+        </form>
+      </div>
+    </section>
+  </div>
+</body>
+</html>
+
