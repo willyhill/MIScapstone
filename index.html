@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>JCW Finance</title>
     <style>
+        /* Global Reset */
         * {
             margin: 0;
             padding: 0;
@@ -14,22 +15,42 @@
         nav {
             display: flex;
             justify-content: center;
-            gap: 20px; 
-            background-color: #3fb888;
+            gap: 20px;
+            background-color: #3fb888; /* Green background for the nav */
             padding: 10px;
             width: 100%;
         }
 
-        nav a {
-            color: black;
-            text-decoration: none;
-            font-size: 1.2em;
+        /* Styling for navigation buttons */
+        .nav-buttons {
+            display: flex;
+            gap: 20px; /* Space between buttons */
         }
 
-        nav a:hover {
-            text-decoration: underline;
+        .nav-button {
+            padding: 10px 20px;
+            border: 2px solid white;
+            background-color: #1abc9c; /* Green background for buttons */
+            color: white;
+            font-size: 1rem;
+            border-radius: 4px; /* Rounded corners */
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            text-align: center;
+            display: inline-block;
         }
 
+        .nav-button a {
+            color: white; /* White text for the links */
+            text-decoration: none; /* No underline */
+        }
+
+        .nav-button:hover {
+            background-color: #1c9f85; /* Darker green on hover */
+            transform: scale(1.05); /* Slight scaling to emphasize it's clickable */
+        }
+
+        /* Container for the page content */
         .container {
             width: 100%;
             height: 100vh;
@@ -45,7 +66,7 @@
         }
 
         h1 {
-            font-size: 4.5em; 
+            font-size: 4.5em;
             font-weight: bold;
             letter-spacing: 2px;
             margin-bottom: 10px;
@@ -60,7 +81,7 @@
             background-color: #3fb888;
             color: white;
             display: flex;
-            justify-content: flex-end;  /* Aligns content to the right */
+            justify-content: flex-end;
             padding: 10px;
             font-size: 1em;
             position: relative;
@@ -87,11 +108,12 @@
             bottom: 0;
             width: 10px;
             height: 50%;
-            background: rgb(0, 128, 128); /* Teal (Bluish green) for the bars */
+            background: rgb(0, 128, 128); /* Teal for the bars */
             transform-origin: center bottom;
             box-shadow: 1px 1px 0 rgba(0, 0, 0, 0.2);
         }
 
+        /* Add individual animations for loader bars */
         .loader__bar:nth-child(1) { left: 0px; transform: scale(1, 0.2); animation: barUp1 4s infinite; }
         .loader__bar:nth-child(2) { left: 15px; transform: scale(1, 0.4); animation: barUp2 4s infinite; }
         .loader__bar:nth-child(3) { left: 30px; transform: scale(1, 0.6); animation: barUp3 4s infinite; }
@@ -109,6 +131,7 @@
             animation: ball624 4s infinite;
         }
 
+        /* Keyframes for loader animations */
         @keyframes ball624 {
             0% { transform: translate(0, 0); }
             50% { transform: translate(60px, 0); }
@@ -142,7 +165,6 @@
             50%, 90% { transform: scale(1, 0.2); }
             100% { transform: scale(1, 1); }
         }
-
     </style>
 </head>
 <body>
@@ -150,8 +172,7 @@
         <nav class="nav-buttons">
             <button class="nav-button"><a href="CreateAccountPage.html">Create Account</a></button>
             <button class="nav-button"><a href="LoginAccountPage.html">Login</a></button>
-          </nav>
-        </header>
+        </nav>
     </nav>
 
     <div class="container">
