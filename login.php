@@ -42,7 +42,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     if ($user) {
         // Verify the password
-        if (password_verify($password, $user['password_hash'])) { //***come back */
+        if (password_verify($password, $user['password_hash'])) { 
             // Password is correct, start a session
             $_SESSION['user_id'] = $user['user_id']; // Store user ID in session
             $_SESSION['email'] = $user['email']; // Optionally store email
