@@ -54,6 +54,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     if ($stmt->execute()) {
         echo "Account created successfully!";
+        echo '<script>
+        alert("Account created successfully!");
+        window.location.href = "LoginAccountPage.html";
+        </script>';
+        exit;
     } else {
         echo "Error saving user to database.";
     }

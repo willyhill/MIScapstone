@@ -25,7 +25,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     // Validate input
     if (empty($email) || empty($password)) {
-        echo "All fields are required.";
+        echo '<script>
+            alert("All fields are required.");
+            window.location.href = "LoginAccountPage.html";
+        </script>';
         exit;
     }
 
@@ -39,19 +42,27 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     if ($user) {
         // Verify the password
-        if (password_verify($password, $user['password'])) {
+        if (password_verify($password, $user['password_hash'])) { //***come back */
             // Password is correct, start a session
-            $_SESSION['user_id'] = $user['id']; // Store user ID in session
+            $_SESSION['user_id'] = $user['user_id']; // Store user ID in session
             $_SESSION['email'] = $user['email']; // Optionally store email
 
             // Redirect to the budget page
-            header('Location: budget_page.php'); // Replace with actual budget page URL
+            header('Location: budget_page.html'); // Replace with actual budget page URL
             exit; // Ensure no further code is executed
         } else {
-            echo "Invalid password.";
+            echo '<script>
+                alert("Invalid password. Please try again.");
+                window.location.href = "LoginAccountPage.html";
+            </script>';
+            exit;
         }
     } else {
-        echo "User not found.";
+        echo '<script>
+            alert("User not found. Please check your email or create an account.");
+            window.location.href = "LoginAccountPage.html";
+        </script>';
+        exit;
     }
 }
 ?>
