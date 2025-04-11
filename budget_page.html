@@ -3,25 +3,21 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <link rel="stylesheet" href="css/budget.css"/>
+  <link href="css/budget.css" rel="stylesheet">
   <title>JCW Financials - My Budget</title>
+  
 </head>
 <body>
   <div class="budget-page">
     <header>
       <nav class="nav-bar">
-        <!-- JCW Financials Logo/Button -->
         <a href="index.html" class="logo">JCW Financials</a>
-        
-        <!-- Home Button -->
         <ul class="nav-links">
-          <li><a href="index.html" class="nav-link nav-button">Home</a></li>
+          <li><a href="index.html" class="nav-link">Home</a></li>
         </ul>
-        
-        <!-- Profile Picture with Dropdown Menu -->
         <div class="profile-menu">
-          <img src="profile.jpg" alt="Profile" class="profile-pic" id="profile-button" />
-          <div class="dropdown-menu" id="dropdown-menu">
+          <img src="https://via.placeholder.com/40" alt="Profile" class="profile-pic" />
+          <div class="dropdown-menu">
             <a href="account.html">Account</a>
             <a href="settings.html">Settings</a>
             <a href="logout.html">Logout</a>
@@ -29,31 +25,150 @@
         </div>
       </nav>
     </header>
+
     <main>
-      <section class="savings-section">
-        <div class="chart-placeholder"></div> <!-- Updated graph section -->
-        <div class="savings-controls">
-          <label>Add To Savings: <input type="number" /></label>
-          <button>Add</button>
-          <label>Remove From Savings: <input type="number" /></label>
-          <button>Remove</button>
-          <label>Change Savings Goal: <input type="number" /></label>
-          <button>Edit</button>
-        </div>
-      </section>
-      <section class="goal-section">
-        <div class="goal-placeholder" data-label="Your Savings Goal"></div>
-        <div class="goal-date-placeholder" data-label="You’ll reach this on..."></div>
+      <div class="input-sections-container">
+        <!-- Income Section -->
+        <section class="income-section">
+          <h2>Submit Income</h2>
+          <label>Amount ($)
+            <input type="number" id="income-amount" />
+          </label>
+          <label>Category
+            <input type="text" id="income-category" placeholder="e.g. Salary, Freelance" />
+          </label>
+          <button onclick="addIncome()">Submit Income</button>
+        </section>
+
+        <!-- Expense Section -->
+        <section class="expense-section">
+          <h2>Submit Expense</h2>
+          <label>Amount ($)
+            <input type="number" id="expense-amount" />
+          </label>
+          <label>Category
+            <input type="text" id="expense-category" placeholder="e.g. Rent, Food" />
+          </label>
+          <button onclick="addExpense()">Submit Expense</button>
+        </section>
+
+        <!-- Savings Section -->
+        <section class="savings-section">
+          <h2>Savings Goal</h2>
+          <label>Set Savings Goal ($)
+            <input type="number" id="savings-goal" />
+          </label>
+          <button onclick="setSavingsGoal()">Set Goal</button>
+          <div class="goal-display" id="goal-display">Your goal: $0</div>
+          <div class="savings-needed-display" id="savings-needed-display">You need to save: $0 more</div>
+        </section>
+      </div>
+
+      <!-- Money Log Section -->
+      <section class="money-log-section">
+        <h3>Money Saved Over Time</h3>
+        <div id="money-log-entries"></div>
       </section>
     </main>
+
     <footer>
-      <section class="footer-links-section">
-        <a href="About Us Wireframe.html" class="footer-link">About</a> | 
-        <a href="mailto:help@JCWFinance.com" class="footer-link">Contact</a>
-      </section>
+      <div class="footer-links">
+        <a href="About Us Wireframe.html" class="footer-link">About Us </a>
+        <a href="contact.html" class="footer-link">Contact</a>
+      </div>
+      <p>&copy; 2023 JCW Financials. All rights reserved.</p>
     </footer>
   </div>
 
-  <script src="script.js"></script>
+  <script>
+    let totalIncome = 0;
+    let totalExpenses = 0;
+    let savingsGoal = 0;
+    let transactions = [];
+
+    function addIncome() {
+      const amount = parseFloat(document.getElementById("income-amount").value);
+      const category = document.getElementById("income-category").value;
+
+      if (!isNaN(amount) && amount > 0 && category) {
+        totalIncome += amount;
+        transactions.push({ type: 'income', amount, category });
+        updateMoneyLog();
+        document.getElementById("income-amount").value = "";
+        document.getElementById("income-category").value = "";
+        updateSavingsInfo();
+      }
+    }
+
+    function addExpense() {
+      const amount = parseFloat(document.getElementById("expense-amount").value);
+      const category = document.getElementById("expense-category").value;
+
+      if (!isNaN(amount) && amount > 0 && category) {
+        totalExpenses += amount;
+        transactions.push({ type: 'expense', amount, category });
+        updateMoneyLog();
+        document.getElementById("expense-amount").value = "";
+        document.getElementById("expense-category").value = "";
+        updateSavingsInfo();
+      }
+    }
+
+    function updateMoneyLog() {
+      const logContainer = document.getElementById("money-log-entries");
+      logContainer.innerHTML = '';
+      
+      if (transactions.length === 0) {
+        logContainer.innerHTML = '<p>No transactions yet. Add income or expenses to see them here.</p>';
+        return;
+      }
+      
+      transactions.forEach((transaction, index) => {
+        const entry = document.createElement("div");
+        entry.className = `log-entry ${transaction.type}`;
+        entry.innerHTML = `
+          <div class="entry-details">
+            <span class="amount">${transaction.type === 'income' ? '+' : '-'} $${transaction.amount.toFixed(2)}</span>
+            <span class="category">${transaction.category}</span>
+          </div>
+          <button onclick="removeTransaction(${index})">Remove</button>
+        `;
+        logContainer.appendChild(entry);
+      });
+    }
+
+    function removeTransaction(index) {
+      const transaction = transactions[index];
+      if (transaction.type === 'income') {
+        totalIncome -= transaction.amount;
+      } else {
+        totalExpenses -= transaction.amount;
+      }
+      transactions.splice(index, 1);
+      updateMoneyLog();
+      updateSavingsInfo();
+    }
+
+    function setSavingsGoal() {
+      const goalInput = parseFloat(document.getElementById("savings-goal").value);
+      if (!isNaN(goalInput)) {
+        savingsGoal = goalInput;
+        document.getElementById("savings-goal").value = "";
+        updateSavingsInfo();
+      }
+    }
+
+    function updateSavingsInfo() {
+      document.getElementById("goal-display").textContent = `Your goal: $${savingsGoal.toFixed(2)}`;
+      
+      const currentSavings = totalIncome - totalExpenses;
+      const needed = Math.max(0, savingsGoal - currentSavings);
+      document.getElementById("savings-needed-display").textContent = `You need to save: $${needed.toFixed(2)} more`;
+    }
+
+    // Initialize the page
+    updateMoneyLog();
+    updateSavingsInfo();
+  </script>
 </body>
 </html>
