@@ -5,10 +5,10 @@ print_r($_POST);
 echo '</pre>';
 
 // Debugging: Print the full path to the database file
-echo realpath(__DIR__ . '/CapstoneDBbrowserFiles/users.db');
+echo realpath(__DIR__ . '/CapstoneDBbrowserFiles/capstoneDBdatabase.db');
 
 // Connect to SQLite database (or create it if it doesn't exist)
-$db = new SQLite3(__DIR__ . '/CapstoneDBbrowserFiles/users.db');
+$db = new SQLite3(__DIR__ . '/CapstoneDBbrowserFiles/capstoneDBdatabase.db');
 
 // Check if the database connection was successful
 if ($db) {

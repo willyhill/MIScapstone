@@ -8,7 +8,7 @@ print_r($_POST);
 echo '</pre>';
 
 // Connect to SQLite database (or create it if it doesn't exist)
-$db = new SQLite3(__DIR__ . '/CapstoneDBbrowserFiles/users.db');
+$db = new SQLite3(__DIR__ . '/CapstoneDBbrowserFiles/capstoneDBdatabase.db');
 
 // Check if the database connection was successful
 if ($db) {
