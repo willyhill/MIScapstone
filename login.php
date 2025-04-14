@@ -48,7 +48,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $_SESSION['email'] = $user['email']; // Optionally store email
 
             // Redirect to the budget page
-            header('Location: budget_page.html'); // Replace with actual budget page URL
+            header('Location: budget.php'); // Replace with actual budget page URL
             exit; // Ensure no further code is executed
         } else {
             echo '<script>
