@@ -208,3 +208,94 @@
 .form button:hover {
   background-color: #005ce6;
 }
+
+/* Media query for screens smaller than 768px (mobile devices) */
+@media (max-width: 768px) {
+  /* Adjust the navigation bar */
+  .nav-bar {
+    flex-direction: column; /* Stack items vertically */
+    align-items: flex-start; /* Align items to the left */
+    height: auto; /* Allow height to adjust dynamically */
+    padding: 10px;
+  }
+
+  .nav-links {
+    margin-left: 0; /* Remove extra margin */
+    flex-direction: column; /* Stack links vertically */
+    width: 100%; /* Take full width */
+  }
+
+  .nav-link {
+    margin-bottom: 10px; /* Add spacing between links */
+    width: 100%; /* Make links take full width */
+    text-align: center; /* Center-align text */
+  }
+
+  /* Adjust the profile menu */
+  .profile-menu {
+    margin-right: 0; /* Remove extra margin */
+    width: 100%; /* Take full width */
+    justify-content: center; /* Center-align the profile picture */
+  }
+
+  /* Adjust the form container */
+  #section2 {
+    width: 90%; /* Take up more space on smaller screens */
+    padding: 15px; /* Reduce padding */
+    margin: 20px auto; /* Center the form */
+  }
+
+  .form-container {
+    width: 100%; /* Make the form take full width */
+    padding: 10px; /* Add some padding */
+  }
+
+  .form {
+    padding: 20px; /* Reduce padding */
+  }
+
+  .input {
+    font-size: 1rem; /* Increase font size for better readability */
+    padding: 10px; /* Add padding for touch-friendly inputs */
+  }
+
+  .form button {
+    font-size: 1rem; /* Increase button font size */
+    padding: 12px; /* Add padding for touch-friendly buttons */
+  }
+
+  /* Adjust the header and sections */
+  #header {
+    font-size: 1.2rem; /* Reduce font size */
+    padding: 10px; /* Reduce padding */
+  }
+
+  #section1 {
+    flex-direction: column; /* Stack content vertically */
+    padding: 10px; /* Reduce padding */
+  }
+
+  #section1 .container {
+    width: 90%; /* Take up more space on smaller screens */
+    padding: 15px; /* Reduce padding */
+  }
+
+  #section1 .container p {
+    font-size: 1rem; /* Adjust font size for smaller screens */
+  }
+
+  #section1 .container a {
+    font-size: 0.9rem; /* Adjust link font size */
+  }
+
+  /* Adjust dropdown menu */
+  .dropdown-menu {
+    width: 100%; /* Take full width */
+    text-align: center; /* Center-align text */
+  }
+
+  .dropdown-menu a {
+    font-size: 1rem; /* Increase font size */
+    padding: 10px; /* Add padding for touch-friendly links */
+  }
+}
