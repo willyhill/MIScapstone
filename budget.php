@@ -39,20 +39,33 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $stmt->bindValue(':user_id', $user_id);
         $stmt->bindValue(':goal', $goal);
         $stmt->execute();
+    } elseif (isset($_POST['remove_transaction'])) {
+        // Handle removal of income or expense
+        $transaction_id = $_POST['transaction_id'];
+        $transaction_type = $_POST['transaction_type'];
+
+        if ($transaction_type == 'income') {
+            $stmt = $db->prepare("DELETE FROM Income WHERE income_id = :transaction_id");
+        } else {
+            $stmt = $db->prepare("DELETE FROM Expenses WHERE expense_id = :transaction_id");
+        }
+
+        $stmt->bindValue(':transaction_id', $transaction_id, SQLITE3_INTEGER);
+        $stmt->execute();
     }
 }
 
 // Fetch Transactions
 $transactions = [];
 
-$incomes = $db->query("SELECT amount, category FROM Income WHERE user_id = $user_id");
+$incomes = $db->query("SELECT income_id, amount, category FROM Income WHERE user_id = $user_id");
 while ($row = $incomes->fetchArray(SQLITE3_ASSOC)) {
-    $transactions[] = ['type' => 'income', 'amount' => $row['amount'], 'category' => $row['category']];
+    $transactions[] = ['type' => 'income', 'id' => $row['income_id'], 'amount' => $row['amount'], 'category' => $row['category']];
 }
 
-$expenses = $db->query("SELECT amount, category FROM Expenses WHERE user_id = $user_id");
+$expenses = $db->query("SELECT expense_id, amount, category FROM Expenses WHERE user_id = $user_id");
 while ($row = $expenses->fetchArray(SQLITE3_ASSOC)) {
-    $transactions[] = ['type' => 'expense', 'amount' => $row['amount'], 'category' => $row['category']];
+    $transactions[] = ['type' => 'expense', 'id' => $row['expense_id'], 'amount' => $row['amount'], 'category' => $row['category']];
 }
 
 // Totals
@@ -157,6 +170,11 @@ while ($row = $savingsData->fetchArray(SQLITE3_ASSOC)) {
                 <span class="amount"><?= $t['type'] === 'income' ? '+' : '-' ?> $<?= number_format($t['amount'], 2) ?></span>
                 <span class="category"><?= htmlspecialchars($t['category']) ?></span>
               </div>
+              <form method="POST" style="display:inline;">
+                <input type="hidden" name="transaction_id" value="<?= $t['id'] ?>">
+                <input type="hidden" name="transaction_type" value="<?= $t['type'] ?>">
+                <button type="submit" name="remove_transaction" onclick="return confirm('Are you sure you want to remove this transaction?')">Remove</button>
+              </form>
             </div>
           <?php endforeach; ?>
         <?php endif; ?>
@@ -263,5 +281,3 @@ while ($row = $savingsData->fetchArray(SQLITE3_ASSOC)) {
   </script>
 </body>
 </html>
-
-
