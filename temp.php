@@ -27,25 +27,26 @@
         $financial_preferences = '';
         $goal_preference = '';
 
-        // Database connection
-        $conn = new mysqli("localhost", "root", "", "jcw_budget");
-
-        // Check connection
-        if ($conn->connect_error) {
-            die("Connection failed: " . $conn->connect_error);
-        }
+        // SQLite database connection
+        $db = new SQLite3(__DIR__ . '/CapstoneDBbrowserFiles/capstoneDBdatabase.db');
 
         // Query to fetch user profile details
-        $sql = "SELECT preferred_currency, financial_preferences, goal_preference 
-                FROM user_profiles 
-                WHERE user_id = ?";
-        $stmt = $conn->prepare($sql);
-        $stmt->bind_param("i", $user_id);
-        $stmt->execute();
-        $stmt->bind_result($preferred_currency, $financial_preferences, $goal_preference);
-        $stmt->fetch();
-        $stmt->close();
-        $conn->close();
+        $stmt = $db->prepare('SELECT preferred_currency, financial_preferences, goal_preference 
+                              FROM user_profiles 
+                              WHERE user_id = :user_id');
+        $stmt->bindValue(':user_id', $user_id, SQLITE3_INTEGER);
+        $result = $stmt->execute();
+
+        // Fetch the result
+        $user_profile = $result->fetchArray(SQLITE3_ASSOC);
+        if ($user_profile) {
+            $preferred_currency = $user_profile['preferred_currency'];
+            $financial_preferences = $user_profile['financial_preferences'];
+            $goal_preference = $user_profile['goal_preference'];
+        }
+
+        // Close the database connection
+        $db->close();
     ?>
     <div class="container">
         <header>
