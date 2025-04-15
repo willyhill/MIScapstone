@@ -46,10 +46,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             // Password is correct, start a session
             $_SESSION['user_id'] = $user['user_id']; // Store user ID in session
             $_SESSION['email'] = $user['email']; // Optionally store email
+            $_SESSION['username'] = $user['username']; // Set the user's username
 
-            // Redirect to the budget page
-            header('Location: budget.php'); // Replace with actual budget page URL
-            exit; // Ensure no further code is executed
+            // Redirect to the profile page
+            header("Location: Profile.php"); // Redirect to the profile page
+            exit(); // Ensure no further code is executed
         } else {
             echo '<script>
                 alert("Invalid password. Please try again.");
