@@ -172,7 +172,9 @@
   width: 100%;
   border-bottom: 1px solid #eee;
   font-size: 0.9rem;
-  padding: 8px 15px;
+  padding: 5px 5px;
+  border-radius: 10px;
+  background-color: white;
 }
 
 .form-section {
@@ -247,7 +249,6 @@
 
   .form-container {
     width: 100%; /* Make the form take full width */
-    padding: 10px; /* Add some padding */
   }
 
   .form {
@@ -256,7 +257,9 @@
 
   .input {
     font-size: 1rem; /* Increase font size for better readability */
-    padding: 10px; /* Add padding for touch-friendly inputs */
+    padding: 5px; /* Add padding for touch-friendly inputs */
+    border-radius: 10px;
+    background-color: white;
   }
 
   .form button {
@@ -278,6 +281,7 @@
   #section1 .container {
     width: 90%; /* Take up more space on smaller screens */
     padding: 15px; /* Reduce padding */
+    margin-top: 50px;
   }
 
   #section1 .container p {
