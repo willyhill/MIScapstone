@@ -72,6 +72,10 @@
         </header>
         <div class="profile-section">
             <div class="profile-photo">
+                <!-- Placeholder for profile picture -->
+                <div class="profile-placeholder">
+                    Placeholder
+                </div>
                 <p>Change Profile Photo</p>
             </div>
             <!-- Dynamically display the username -->
