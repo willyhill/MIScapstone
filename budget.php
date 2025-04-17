@@ -32,15 +32,38 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $stmt->bindValue(':category', $category);
         $stmt->bindValue(':amount', $amount);
         $stmt->execute();
-    } elseif (isset($_POST['submit_savings'])) {
-        $goal = $_POST['savings_goal'];
-        $stmt = $db->prepare("INSERT INTO Savings (user_id, goal_name, target_amount, current_amount, due_date, created_at, updated_at) 
-                              VALUES (:user_id, 'General Savings', :goal, 0, NULL, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)");
-        $stmt->bindValue(':user_id', $user_id);
-        $stmt->bindValue(':goal', $goal);
-        $stmt->execute();
+      } elseif (isset($_POST['submit_savings'])) {
+        if (!empty($_POST['savings_goal'])) {
+            $goal = $_POST['savings_goal'];
+            
+            // First clear any existing goal
+            $db->exec("DELETE FROM Savings WHERE user_id = $user_id");
+            
+            // Insert new goal
+            $stmt = $db->prepare("
+                INSERT INTO Savings 
+                (user_id, goal_name, target_amount, current_amount, due_date, created_at, updated_at) 
+                VALUES 
+                (:user_id, 'General Savings', :goal, 0, NULL, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)
+            ");
+            $stmt->bindValue(':user_id', $user_id);
+            $stmt->bindValue(':goal', $goal);
+            $stmt->execute();
+            
+            $_SESSION['success'] = "Savings goal set successfully!";
+        } else {
+            $_SESSION['error'] = "Please enter a savings goal amount";
+        }
+  
+      } elseif (isset($_POST['clear_savings'])) {
+          $stmt = $db->prepare("DELETE FROM Savings WHERE user_id = :user_id");
+          $stmt->bindValue(':user_id', $user_id);
+          $stmt->execute();
+          
+          // Optional success message
+          $_SESSION['success'] = "Savings goal cleared successfully";
+      }
     } elseif (isset($_POST['remove_transaction'])) {
-        // Handle removal of income or expense
         $transaction_id = $_POST['transaction_id'];
         $transaction_type = $_POST['transaction_type'];
 
@@ -53,7 +76,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $stmt->bindValue(':transaction_id', $transaction_id, SQLITE3_INTEGER);
         $stmt->execute();
     }
-}
+
 
 // Fetch Transactions
 $transactions = [];
@@ -76,15 +99,43 @@ $savings_goal = $db->querySingle("SELECT IFNULL(MAX(target_amount), 0) FROM Savi
 $current_savings = $total_income - $total_expense;
 $savings_needed = max(0, $savings_goal - $current_savings);
 
-// Fetch savings history from the Savings table
-$savingsData = $db->query("SELECT created_at, current_amount FROM Savings WHERE user_id = $user_id ORDER BY created_at ASC");
+// Savings trend chart data
+$savingsData = $db->query("
+    SELECT 
+        date,
+        (SELECT IFNULL(SUM(amount), 0) FROM Income WHERE user_id = $user_id AND date <= t.date) -
+        (SELECT IFNULL(SUM(amount), 0) FROM Expenses WHERE user_id = $user_id AND date <= t.date) AS current_amount
+    FROM (
+        SELECT date FROM Income WHERE user_id = $user_id
+        UNION
+        SELECT date FROM Expenses WHERE user_id = $user_id
+    ) t
+    ORDER BY date ASC
+");
 
 $dates = $amounts = [];
 while ($row = $savingsData->fetchArray(SQLITE3_ASSOC)) {
-    $dates[] = $row['created_at'];
+    $date = new DateTime($row['date']);
+    $dates[] = $date->format('M d'); // Formats as "Apr 17"
     $amounts[] = $row['current_amount'];
 }
+
+// For chart labels
+$incomeLabels = $incomeAmounts = $expenseLabels = $expenseAmounts = [];
+
+$incomeQuery = $db->query("SELECT category, SUM(amount) as total FROM Income WHERE user_id = $user_id GROUP BY category");
+while ($row = $incomeQuery->fetchArray(SQLITE3_ASSOC)) {
+    $incomeLabels[] = $row['category'];
+    $incomeAmounts[] = $row['total'];
+}
+
+$expenseQuery = $db->query("SELECT category, SUM(amount) as total FROM Expenses WHERE user_id = $user_id GROUP BY category");
+while ($row = $expenseQuery->fetchArray(SQLITE3_ASSOC)) {
+    $expenseLabels[] = $row['category'];
+    $expenseAmounts[] = $row['total'];
+}
 ?>
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -146,52 +197,67 @@ while ($row = $savingsData->fetchArray(SQLITE3_ASSOC)) {
 
         <!-- Savings Section -->
         <section class="savings-section">
-          <form method="POST">
-            <h2>Savings Goal</h2>
-            <label>Set Savings Goal ($)
-              <input type="number" name="savings_goal" step="0.01" required />
-            </label>
+        <form method="POST">
+          <h2>Savings Goal</h2>
+          <label>Set Savings Goal ($)
+            <input type="number" name="savings_goal" step="0.01" /> <!-- Removed 'required' -->
+          </label>
+          <div class="button-group">
             <button type="submit" name="submit_savings">Set Goal</button>
-          </form>
+            <button type="submit" name="clear_savings" style="background-color: #e74c3c;" 
+                    onclick="return confirm('Are you sure you want to clear your savings goal?')">
+              Clear Goal
+            </button>
+          </div>
+        </form>
           <div class="goal-display">Your goal: $<?= number_format($savings_goal, 2) ?></div>
           <div class="savings-needed-display">You need to save: $<?= number_format($savings_needed, 2) ?> more</div>
         </section>
+
+        <!-- Money Log Section -->
+        <section class="money-log-section" style="flex-grow: 1;">
+          <h3>Money Saved Over Time</h3>
+          <?php if (empty($transactions)): ?>
+            <p>No transactions yet. Add income or expenses to see them here.</p>
+          <?php else: ?>
+            <?php foreach ($transactions as $t): ?>
+              <div class="log-entry <?= $t['type'] ?>">
+                <div class="entry-details">
+                  <span class="amount"><?= $t['type'] === 'income' ? '+' : '-' ?> $<?= number_format($t['amount'], 2) ?></span>
+                  <span class="category"><?= htmlspecialchars($t['category']) ?></span>
+                </div>
+                <form method="POST" style="display:inline;">
+                  <input type="hidden" name="transaction_id" value="<?= $t['id'] ?>">
+                  <input type="hidden" name="transaction_type" value="<?= $t['type'] ?>">
+                  <button type="submit" name="remove_transaction" onclick="return confirm('Are you sure you want to remove this transaction?')">Remove</button>
+                </form>
+              </div>
+            <?php endforeach; ?>
+          <?php endif; ?>
+        </section>
       </div>
 
-      <!-- Money Log Section -->
-      <section class="money-log-section">
-        <h3>Money Saved Over Time</h3>
-        <?php if (empty($transactions)): ?>
-          <p>No transactions yet. Add income or expenses to see them here.</p>
-        <?php else: ?>
-          <?php foreach ($transactions as $t): ?>
-            <div class="log-entry <?= $t['type'] ?>">
-              <div class="entry-details">
-                <span class="amount"><?= $t['type'] === 'income' ? '+' : '-' ?> $<?= number_format($t['amount'], 2) ?></span>
-                <span class="category"><?= htmlspecialchars($t['category']) ?></span>
-              </div>
-              <form method="POST" style="display:inline;">
-                <input type="hidden" name="transaction_id" value="<?= $t['id'] ?>">
-                <input type="hidden" name="transaction_type" value="<?= $t['type'] ?>">
-                <button type="submit" name="remove_transaction" onclick="return confirm('Are you sure you want to remove this transaction?')">Remove</button>
-              </form>
-            </div>
-          <?php endforeach; ?>
-        <?php endif; ?>
-      </section>
-
-      <!-- Charts Section -->
-      <section class="charts-section" style="margin-top: 40px;">
+      <!-- Updated Charts Section - Now Vertical Stack -->
+      <section class="charts-section">
         <h3>Financial Overview</h3>
-        <canvas id="incomeExpenseChart" height="100"></canvas>
-        <canvas id="savingsProgressChart" height="100" style="margin-top: 40px;"></canvas>
-        <canvas id="savingsTrendChart" height="100" style="margin-top: 40px;"></canvas>
-      </section>
+        
+        <div class="chart-container">
+    <canvas id="incomeExpenseChart"></canvas>
+  </div>
+  
+  <div class="chart-container">
+    <canvas id="savingsProgressChart"></canvas>
+  </div>
+  
+  <div class="chart-container">
+    <canvas id="savingsTrendChart"></canvas>
+  </div>
+</section>
     </main>
 
     <footer>
       <div class="footer-links">
-        <a href="About Us Wireframe.html" class="footer-link">About Us </a>
+        <a href="About Us Wireframe.html" class="footer-link">About Us</a>
         <a href="contact.html" class="footer-link">Contact</a>
       </div>
       <p>&copy; 2023 JCW Financials. All rights reserved.</p>
@@ -199,84 +265,123 @@ while ($row = $savingsData->fetchArray(SQLITE3_ASSOC)) {
   </div>
 
   <script>
+    // Common Chart Configuration
+    const chartOptions = {
+  responsive: true,
+  maintainAspectRatio: false,
+  plugins: {
+    legend: {
+      position: 'bottom'
+    },
+    title: {
+      display: true,
+      font: {
+        size: 18,
+        weight: 'bold'
+      },
+      padding: {
+        top: 10,
+        bottom: 20
+      }
+    }
+  }
+};
+
     // Income vs Expenses Doughnut Chart
-    const incomeExpenseChart = new Chart(document.getElementById('incomeExpenseChart'), {
-      type: 'doughnut',
-      data: {
-        labels: <?= json_encode(array_merge($incomeLabels, $expenseLabels)) ?>,
-        datasets: [{
-          label: 'Income',
-          data: <?= json_encode(array_merge($incomeAmounts, $expenseAmounts)) ?>,
-          backgroundColor: [
-            '#2ecc71', '#27ae60', '#1abc9c', '#16a085',
-            '#e74c3c', '#c0392b', '#f39c12', '#d35400'
-          ],
-        }]
-      },
-      options: {
-        plugins: {
-          title: {
-            display: true,
-            text: 'Income & Expenses by Category'
-          }
+const incomeExpenseChart = new Chart(
+  document.getElementById('incomeExpenseChart'),
+  {
+    type: 'doughnut',
+    data: {
+      labels: <?= json_encode(array_merge($incomeLabels, $expenseLabels)) ?>,
+      datasets: [{
+        label: 'Income and Expenses',
+        data: [
+          ...<?= json_encode($incomeAmounts) ?>,
+          ...<?= json_encode($expenseAmounts) ?>
+        ],
+        backgroundColor: [
+          '#27ae60', '#2ecc71', '#1abc9c', '#16a085',
+          '#e74c3c', '#c0392b', '#f39c12', '#d35400'
+        ],
+      }]
+    },
+    options: {
+      ...chartOptions,
+      plugins: {
+        ...chartOptions.plugins,
+        title: {
+          ...chartOptions.plugins.title,
+          text: 'Income & Expenses by Category' // Unique title
         }
       }
-    });
+    }
+  }
+);
 
-    // Savings Goal Progress Chart
-    const savingsProgressChart = new Chart(document.getElementById('savingsProgressChart'), {
-      type: 'bar',
-      data: {
-        labels: ['Goal', 'Saved'],
-        datasets: [{
-          label: 'Savings Progress',
-          data: [<?= $savings_goal ?>, <?= $current_savings ?>],
-          backgroundColor: ['#f1c40f', '#2ecc71']
-        }]
-      },
-      options: {
-        indexAxis: 'y',
-        plugins: {
-          title: {
-            display: true,
-            text: 'Savings Goal Progress'
-          }
-        },
-        scales: {
-          x: {
-            beginAtZero: true
-          }
+   // Savings Goal Progress Chart
+const savingsProgressChart = new Chart(
+  document.getElementById('savingsProgressChart'),
+  {
+    type: 'bar',
+    data: {
+      labels: ['Goal', 'Saved'],
+      datasets: [{
+        label: 'Savings Progress',
+        data: [<?= $savings_goal ?>, <?= $current_savings ?>],
+        backgroundColor: ['#f1c40f', '#2ecc71']
+      }]
+    },
+    options: {
+      ...chartOptions,
+      indexAxis: 'y',
+      plugins: {
+        ...chartOptions.plugins,
+        title: {
+          ...chartOptions.plugins.title,
+          text: 'Savings Goal Progress' // Unique title
         }
       }
-    });
+    }
+  }
+);
 
-    // Line chart for savings over time
-    const savingsTrendChart = new Chart(document.getElementById('savingsTrendChart'), {
-      type: 'line',
-      data: {
-        labels: <?= json_encode($dates) ?>,
-        datasets: [{
-          label: 'Savings Over Time',
-          data: <?= json_encode($amounts) ?>,
-          fill: true,
-          backgroundColor: 'rgba(26, 188, 156, 0.2)',
-          borderColor: '#1abc9c',
-          tension: 0.3
-        }]
-      },
-      options: {
-        plugins: {
-          title: {
-            display: true,
-            text: 'Your Savings Trend'
-          }
-        },
-        scales: {
-          y: {
-            beginAtZero: true
-          }
+// Savings Trend Line Chart
+const savingsTrendChart = new Chart(
+  document.getElementById('savingsTrendChart'),
+  {
+    type: 'line',
+    data: {
+      labels: <?= json_encode($dates) ?>,
+      datasets: [{
+        label: 'Savings Over Time',
+        data: <?= json_encode($amounts) ?>,
+        fill: true,
+        backgroundColor: 'rgba(26, 188, 156, 0.2)',
+        borderColor: '#1abc9c',
+        borderWidth: 2,
+        tension: 0.3,
+        pointRadius: 5,
+        pointBackgroundColor: '#1abc9c'
+      }]
+    },
+    options: {
+      ...chartOptions,
+      plugins: {
+        ...chartOptions.plugins,
+        title: {
+          ...chartOptions.plugins.title,
+          text: 'Savings Trend Over Time'
         }
       }
+    }
+  }
+);
+    // Handle window resizing
+    window.addEventListener('resize', function() {
+      incomeExpenseChart.resize();
+      savingsProgressChart.resize();
+      savingsTrendChart.resize();
     });
   </script>
 </body>

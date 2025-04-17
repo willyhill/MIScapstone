@@ -8,6 +8,7 @@ body {
   flex-direction: column;
   min-height: 100vh;
   background-color: #ffffff;
+  width: 100%;
 }
 
 /* Navigation Bar */
@@ -151,52 +152,51 @@ button {
   transition: background-color 0.3s;
 }
 
+.button-group {
+  display: flex;
+  gap: 10px;
+  margin-top: 10px;
+}
+
 button:hover {
   background-color: #16a085;
 }
 
-  
-
+/* Goal and Savings Display */
 .goal-display, 
-  .savings-needed-display {
-    margin-top: 15px;
-    padding: 12px 15px;
-    border-radius: 8px;
-    font-size: 1rem;
-    font-weight: bold;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-  }
+.savings-needed-display {
+  margin-top: 15px;
+  padding: 12px 15px;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
 
-  .goal-display {
-    background-color: #e8f8f5;
-    color: #148f77;
-    border-left: 4px solid #1abc9c;
-  }
+.goal-display {
+  background-color: #e8f8f5;
+  color: #148f77;
+  border-left: 4px solid #1abc9c;
+}
 
-  .savings-needed-display {
-    background-color: #fef9e7;
-    color: #d35400;
-    border-left: 4px solid #f1c40f;
-  }
+.savings-needed-display {
+  background-color: #fef9e7;
+  color: #d35400;
+  border-left: 4px solid #f1c40f;
+}
 
-  .goal-display::before {
-    content: "🎯";
-    font-size: 1.2em;
-  }
+.goal-display::before {
+  content: "🎯";
+  font-size: 1.2em;
+}
 
-  .savings-needed-display::before {
-    content: "💰";
-    font-size: 1.2em;
-  }
-
-
-  
-  
-  
-  
+.savings-needed-display::before {
+  content: "💰";
+  font-size: 1.2em;
+}
 
 /* Money Log Section */
 .money-log-section {
@@ -249,9 +249,12 @@ footer {
   color: white;
   text-align: center;
   padding: 15px 0;
-  margin-top: auto;
+  margin-top: auto;  /* Ensures footer stays at bottom */
+  width: 100%;       /* Ensures footer spans full width */
+  position: relative;
 }
 
+/* Footer Links */
 .footer-links {
   display: flex;
   justify-content: center;
@@ -267,36 +270,35 @@ footer {
   text-decoration: underline;
 }
 
-
-/* Chart Container */
 .charts-section {
+  width: 100%;
   margin-top: 40px;
-  text-align: center;
+  padding: 0 20px; /* Add some side padding */
 }
 
-canvas {
-  max-width: 100%;
-  margin: 20px 0;
-  border-radius: 8px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+.chart-container {
+  width: 100%;
+  margin-bottom: 40px;
+  height: 500px; /* Increased from 400px */
 }
 
-/* Chart Title Styling */
-.charts-section h3 {
-  font-size: 1.8rem;
-  color: #2c3e50;
-  font-weight: bold;
-  margin-bottom: 20px;
+.chart-container canvas {
+  width: 100% !important;
+  height: 100% !important; /* Now fills container height */
+  max-width: 900px; /* Increased from 800px */
+  margin: 0 auto;
+  display: block;
 }
 
-/* Add responsiveness for smaller screens */
-@media screen and (max-width: 768px) {
-  .charts-section {
+/* Mobile responsiveness */
+@media (max-width: 768px) {
+  .chart-container {
+    height: 400px; /* Still larger than original 300px */
+    margin-bottom: 30px;
+  }
+}
+
+  footer {
     padding: 10px;
   }
-
-canvas {
-  display: block;
-  width: 100% !important;
-  height: auto !important;
 }
