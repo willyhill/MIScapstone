@@ -153,20 +153,52 @@ header h1 {
 
 /* Profile Photo Section */
 .profile-photo {
+  display: flex;
+  justify-content: center;
+  align-items: center;
   margin-bottom: 20px;
+  position: relative; /* Position relative for hover effect */
 }
 
 .profile-placeholder {
-  width: 150px;
-  height: 150px;
+  width: 100px; /* Smaller size */
+  height: 100px; /* Smaller size */
   border-radius: 50%;
-  background-color: lightgreen;
+  background-color: #d3d3d3; /* Light gray background */
+  position: relative;
   display: flex;
-  align-items: center;
   justify-content: center;
-  font-size: 16px;
+  align-items: center;
+  cursor: pointer;
+}
+
+.camera-icon {
+  font-size: 24px; /* Adjust size of the camera icon */
+  color: #555; /* Darker gray for the icon */
+  position: absolute;
+  pointer-events: none; /* Ensure the icon doesn't interfere with hover/click */
+}
+
+.profile-placeholder:hover .camera-icon {
+  color: #000; /* Change icon color on hover */
+}
+
+.profile-placeholder:hover .hover-text {
+  display: flex; /* Show text on hover */
+}
+
+.hover-text {
+  display: none; /* Hidden by default */
+  position: absolute;
   color: white;
+  font-size: 0.9rem;
   text-align: center;
+  background-color: rgba(0, 0, 0, 0.6); /* Semi-transparent background */
+  border-radius: 50%;
+  width: 100px;
+  height: 100px;
+  justify-content: center;
+  align-items: center;
 }
 
 .profile-photo p {

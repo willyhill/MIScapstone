@@ -74,9 +74,8 @@
             <div class="profile-photo">
                 <!-- Placeholder for profile picture -->
                 <div class="profile-placeholder">
-                    Placeholder
+                    <div class="hover-text">Change Photo</div>
                 </div>
-                <p>Change Profile Photo</p>
             </div>
             <!-- Dynamically display the username -->
             <h2>Hello, <?php echo htmlspecialchars($username); ?>!</h2>
