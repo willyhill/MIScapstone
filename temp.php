@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>JCW Financials - Profile</title>
     <link rel="stylesheet" href="css/profile.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/vue@3"></script>
 </head>
 <body>
     <?php
@@ -48,18 +50,14 @@
         // Close the database connection
         $db->close();
     ?>
-    <div class="container">
+    <div class="container" id="app">
         <header>
             <nav class="nav-bar">
-                <!-- JCW Financials Logo/Button -->
-                <a href="index.html" class="logo">JCW Financials</a>
-                
-                <!-- Home Button -->
+                <a href="index.php" class="logo">JCW Financials</a>
                 <ul class="nav-links">
-                    <li><a href="index.html" class="nav-link nav-button">Home</a></li>
+                    <li><button class="nav-button"><a href="index.php">Home</a></button></li>
+                    <li><button class="nav-button"><a href="budget.php">Budget Page</a></button></li>
                 </ul>
-                
-                <!-- Profile Picture with Dropdown Menu -->
                 <div class="profile-menu">
                     <img src="profile.jpg" alt="Profile" class="profile-pic" id="profile-button" />
                     <div class="dropdown-menu" id="dropdown-menu">
@@ -74,6 +72,7 @@
             <div class="profile-photo">
                 <!-- Placeholder for profile picture -->
                 <div class="profile-placeholder">
+                    <i class="fas fa-camera camera-icon"></i> <!-- Camera icon -->
                     <div class="hover-text">Change Photo</div>
                 </div>
             </div>
@@ -81,7 +80,19 @@
             <h2>Hello, <?php echo htmlspecialchars($username); ?>!</h2>
             <div class="account-details">
                 <label for="preferred_currency">Preferred Currency:</label>
-                <input type="text" id="preferred_currency" name="preferred_currency" value="<?php echo htmlspecialchars($preferred_currency); ?>" readonly>
+                <span id="current-currency">{{ currency }}</span>
+                
+                <!-- Form for Currency Toggle -->
+                <form method="post" action="">
+                    <label class="label">
+                        <div class="toggle">
+                            <input class="toggle-state" type="checkbox" @change="toggleCurrency" :checked="currency === 'CAD'">
+                            <div class="indicator"></div>
+                        </div>
+                        <span class="label-text">Switch Currency</span>
+                    </label>
+                    <button type="submit" class="toggle-submit">Apply</button>
+                </form>
                 
                 <label for="financial_preferences">Financial Preferences:</label>
                 <textarea id="financial_preferences" name="financial_preferences" readonly><?php echo htmlspecialchars($financial_preferences); ?></textarea>
@@ -94,5 +105,31 @@
             </div>
         </div>
     </div>
+    <script>
+        const app = Vue.createApp({
+            data() {
+                return {
+                    currency: '<?php echo $preferred_currency; ?>' // Initialize with PHP value
+                };
+            },
+            methods: {
+                updateCurrency() {
+                    // Send the updated currency to the server via an AJAX request
+                    fetch('update_currency.php', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({ currency: this.currency })
+                    });
+                },
+                toggleCurrency() {
+                    this.currency = this.currency === 'USD' ? 'CAD' : 'USD';
+                }
+            }
+        });
+
+        app.mount('#app');
+    </script>
 </body>
 </html>

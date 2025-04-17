@@ -5,6 +5,21 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link href="css/CreateAccountPage.css" rel="stylesheet">
+  <style>
+    .profile-pic {
+      width: 35px; /* Consistent size */
+      height: 35px;
+      border-radius: 50%; /* Circular shape */
+      cursor: pointer;
+      border: 2px solid white; /* White border for contrast */
+      transition: transform 0.2s ease, box-shadow 0.3s ease; /* Smooth hover effect */
+    }
+
+    .profile-pic:hover {
+      transform: scale(1.1); /* Slight zoom on hover */
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Add shadow on hover */
+    }
+  </style>
 </head>
 <body>
   <div class="login-page">
@@ -42,7 +57,7 @@
     <section id="section2"> 
       <div class="form-container">
         <form class="form" action="login.php" method="POST">
-          <span class="title">Login Account</span>
+          <span class="title">Welcom, Login!</span>
 
           <!-- Email Input -->
           <input type="email" class="input" placeholder="Email" name="email" required>

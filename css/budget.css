@@ -15,10 +15,10 @@ body {
 .nav-bar {
   display: flex;
   justify-content: space-between;
-  align-items: center;
+  align-items: center; /* Align items vertically in the center */
   padding: 0 20px;
   background-color: #1abc9c;
-  height: 60px;
+  height: 60px; /* Ensure enough height for the profile picture */
   position: fixed;
   top: 0;
   left: 0;
@@ -54,26 +54,42 @@ body {
 }
 
 .profile-menu {
+  display: flex;
+  align-items: center; /* Center the profile picture vertically */
+  justify-content: center; /* Center the profile picture horizontally */
+  margin-right: 20px; /* Add spacing from other elements */
   position: relative;
+  height: 100%; /* Match the height of the nav bar */
 }
 
 .profile-pic {
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
+  width: 35px; /* Consistent size */
+  height: 35px; /* Ensure height matches width for a perfect circle */
+  border-radius: 50%; /* Circular shape */
   cursor: pointer;
-  border: 2px solid white;
+  border: 2px solid white; /* White border for contrast */
+  object-fit: cover; /* Maintain aspect ratio */
+  transition: transform 0.2s ease, box-shadow 0.3s ease; /* Smooth hover effect */
+  margin: 0; /* Remove unnecessary margins */
+  padding: 0; /* Remove unnecessary padding */
+}
+
+.profile-pic:hover {
+  transform: scale(1.1); /* Slight zoom on hover */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Add shadow on hover */
 }
 
 .dropdown-menu {
   display: none;
   position: absolute;
-  right: 0;
+  top: 100%; /* Position the dropdown below the profile picture */
+  right: 0; /* Align the dropdown to the right edge of the profile picture */
   background-color: white;
   min-width: 160px;
-  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
-  z-index: 1;
+  box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+  z-index: 10; /* Ensure the dropdown appears above other elements */
   border-radius: 4px;
+  overflow: hidden; /* Prevent content from overflowing the dropdown */
 }
 
 .dropdown-menu a {
@@ -88,7 +104,7 @@ body {
 }
 
 .profile-menu:hover .dropdown-menu {
-  display: block;
+  display: block; /* Show the dropdown when hovering over the profile menu */
 }
 
 /* Main Content */
@@ -296,9 +312,26 @@ footer {
     height: 400px; /* Still larger than original 300px */
     margin-bottom: 30px;
   }
+
+  .profile-menu {
+    justify-content: center; /* Ensure proper alignment on smaller screens */
+  }
+
+  .profile-pic {
+    width: 30px; /* Adjust size for smaller screens */
+    height: 30px;
+  }
 }
 
-  footer {
-    padding: 10px;
-  }
+footer {
+  padding: 10px;
+}
+
+.footer-links {
+  flex-direction: column;
+  gap: 10px;
+}
+
+.footer-link {
+  font-size: 0.9rem;
 }
