@@ -1,3 +1,7 @@
+<?php
+session_start();
+$is_logged_in = isset($_SESSION['user_id']);
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -169,10 +173,15 @@
 </head>
 <body>
     <nav>
-        <nav class="nav-buttons">
-            <button class="nav-button"><a href="CreateAccountPage.html">Create Account</a></button>
-            <button class="nav-button"><a href="LoginAccountPage.html">Login</a></button>
-        </nav>
+        <div class="nav-buttons">
+            <?php if ($is_logged_in): ?>
+                <button class="nav-button"><a href="budget.php">Budget Page</a></button>
+                <button class="nav-button"><a href="logout.php">Logout</a></button>
+            <?php else: ?>
+                <button class="nav-button"><a href="CreateAccountPage.html">Create Account</a></button>
+                <button class="nav-button"><a href="LoginAccountPage.html">Login</a></button>
+            <?php endif; ?>
+        </div>
     </nav>
 
     <div class="container">
@@ -198,5 +207,5 @@
         <p>Contact Us: <a href="mailto:help@JCWFinance.com" style="color: white;">help@JCWFinance.com</a></p>
     </footer>
 </body>
-</html> 
+</html>
 

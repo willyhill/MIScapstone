@@ -48,8 +48,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $_SESSION['email'] = $user['email']; // Optionally store email
             $_SESSION['username'] = $user['username']; // Set the user's username
 
-            // Redirect to the profile page
-            header("Location: Profile.php"); // Redirect to the profile page
+            // Redirect to the budget page
+            header("Location: budget.php"); // Redirect to the budget page
             exit(); // Ensure no further code is executed
         } else {
             echo '<script>
