@@ -32,7 +32,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $stmt->bindValue(':category', $category);
         $stmt->bindValue(':amount', $amount);
         $stmt->execute();
-      } elseif (isset($_POST['submit_savings'])) {
+    } elseif (isset($_POST['submit_savings'])) {
         if (!empty($_POST['savings_goal'])) {
             $goal = $_POST['savings_goal'];
             
@@ -54,15 +54,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         } else {
             $_SESSION['error'] = "Please enter a savings goal amount";
         }
-  
-      } elseif (isset($_POST['clear_savings'])) {
-          $stmt = $db->prepare("DELETE FROM Savings WHERE user_id = :user_id");
-          $stmt->bindValue(':user_id', $user_id);
-          $stmt->execute();
-          
-          // Optional success message
-          $_SESSION['success'] = "Savings goal cleared successfully";
-      }
+    } elseif (isset($_POST['clear_savings'])) {
+        $stmt = $db->prepare("DELETE FROM Savings WHERE user_id = :user_id");
+        $stmt->bindValue(':user_id', $user_id);
+        $stmt->execute();
+        
+        $_SESSION['success'] = "Savings goal cleared successfully";
     } elseif (isset($_POST['remove_transaction'])) {
         $transaction_id = $_POST['transaction_id'];
         $transaction_type = $_POST['transaction_type'];
@@ -75,21 +72,42 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         $stmt->bindValue(':transaction_id', $transaction_id, SQLITE3_INTEGER);
         $stmt->execute();
+        
+        // Refresh the page to show updated transactions
+        header("Location: ".$_SERVER['PHP_SELF']);
+        exit;
     }
+}
 
-
-// Fetch Transactions
+// Fetch Transactions with dates
 $transactions = [];
 
-$incomes = $db->query("SELECT income_id, amount, category FROM Income WHERE user_id = $user_id");
+$incomes = $db->query("SELECT income_id, amount, category, date FROM Income WHERE user_id = $user_id ORDER BY date DESC");
 while ($row = $incomes->fetchArray(SQLITE3_ASSOC)) {
-    $transactions[] = ['type' => 'income', 'id' => $row['income_id'], 'amount' => $row['amount'], 'category' => $row['category']];
+    $transactions[] = [
+        'type' => 'income', 
+        'id' => $row['income_id'], 
+        'amount' => $row['amount'], 
+        'category' => $row['category'],
+        'date' => $row['date']
+    ];
 }
 
-$expenses = $db->query("SELECT expense_id, amount, category FROM Expenses WHERE user_id = $user_id");
+$expenses = $db->query("SELECT expense_id, amount, category, date FROM Expenses WHERE user_id = $user_id ORDER BY date DESC");
 while ($row = $expenses->fetchArray(SQLITE3_ASSOC)) {
-    $transactions[] = ['type' => 'expense', 'id' => $row['expense_id'], 'amount' => $row['amount'], 'category' => $row['category']];
+    $transactions[] = [
+        'type' => 'expense', 
+        'id' => $row['expense_id'], 
+        'amount' => $row['amount'], 
+        'category' => $row['category'],
+        'date' => $row['date']
+    ];
 }
+
+// Sort transactions by date (newest first)
+usort($transactions, function($a, $b) {
+    return strtotime($b['date']) - strtotime($a['date']);
+});
 
 // Totals
 $total_income = $db->querySingle("SELECT IFNULL(SUM(amount), 0) FROM Income WHERE user_id = $user_id");
@@ -116,7 +134,7 @@ $savingsData = $db->query("
 $dates = $amounts = [];
 while ($row = $savingsData->fetchArray(SQLITE3_ASSOC)) {
     $date = new DateTime($row['date']);
-    $dates[] = $date->format('M d'); // Formats as "Apr 17"
+    $dates[] = $date->format('M d');
     $amounts[] = $row['current_amount'];
 }
 
@@ -136,7 +154,6 @@ while ($row = $expenseQuery->fetchArray(SQLITE3_ASSOC)) {
 }
 ?>
 
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -149,21 +166,21 @@ while ($row = $expenseQuery->fetchArray(SQLITE3_ASSOC)) {
 <body>
   <div class="budget-page">
     <header>
-    <nav class="nav-bar">
+      <nav class="nav-bar">
         <a href="index.html" class="logo">JCW Financials</a>
         <ul class="nav-links">
-            <li><a href="index.html" class="nav-link">Home</a></li>
+          <li><a href="index.html" class="nav-link">Home</a></li>
         </ul>
         <div class="profile-menu">
-            <img src="profile.jpg" alt="Profile" class="profile-pic" />
-            <div class="dropdown-menu">
-                <a href="account.html">Account</a>
-                <a href="settings.html">Settings</a>
-                <a href="logout.html">Logout</a>
-            </div>
+          <img src="profile.jpg" alt="Profile" class="profile-pic" />
+          <div class="dropdown-menu">
+            <a href="account.html">Account</a>
+            <a href="settings.html">Settings</a>
+            <a href="logout.html">Logout</a>
+          </div>
         </div>
-    </nav>
-</header>
+      </nav>
+    </header>
 
     <main>
       <div class="input-sections-container">
@@ -197,19 +214,19 @@ while ($row = $expenseQuery->fetchArray(SQLITE3_ASSOC)) {
 
         <!-- Savings Section -->
         <section class="savings-section">
-        <form method="POST">
-          <h2>Savings Goal</h2>
-          <label>Set Savings Goal ($)
-            <input type="number" name="savings_goal" step="0.01" /> <!-- Removed 'required' -->
-          </label>
-          <div class="button-group">
-            <button type="submit" name="submit_savings">Set Goal</button>
-            <button type="submit" name="clear_savings" style="background-color: #e74c3c;" 
-                    onclick="return confirm('Are you sure you want to clear your savings goal?')">
-              Clear Goal
-            </button>
-          </div>
-        </form>
+          <form method="POST">
+            <h2>Savings Goal</h2>
+            <label>Set Savings Goal ($)
+              <input type="number" name="savings_goal" step="0.01" />
+            </label>
+            <div class="button-group">
+              <button type="submit" name="submit_savings">Set Goal</button>
+              <button type="submit" name="clear_savings" style="background-color: #e74c3c;" 
+                      onclick="return confirm('Are you sure you want to clear your savings goal?')">
+                Clear Goal
+              </button>
+            </div>
+          </form>
           <div class="goal-display">Your goal: $<?= number_format($savings_goal, 2) ?></div>
           <div class="savings-needed-display">You need to save: $<?= number_format($savings_needed, 2) ?> more</div>
         </section>
@@ -226,33 +243,36 @@ while ($row = $expenseQuery->fetchArray(SQLITE3_ASSOC)) {
                   <span class="amount"><?= $t['type'] === 'income' ? '+' : '-' ?> $<?= number_format($t['amount'], 2) ?></span>
                   <span class="category"><?= htmlspecialchars($t['category']) ?></span>
                 </div>
-                <form method="POST" style="display:inline;">
-                  <input type="hidden" name="transaction_id" value="<?= $t['id'] ?>">
-                  <input type="hidden" name="transaction_type" value="<?= $t['type'] ?>">
-                  <button type="submit" name="remove_transaction" onclick="return confirm('Are you sure you want to remove this transaction?')">Remove</button>
-                </form>
+                <div class="entry-right">
+                  <span class="date"><?= date('M j, Y', strtotime($t['date'])) ?></span>
+                  <form method="POST" style="display:inline;">
+                    <input type="hidden" name="transaction_id" value="<?= $t['id'] ?>">
+                    <input type="hidden" name="transaction_type" value="<?= $t['type'] ?>">
+                    <button type="submit" name="remove_transaction" onclick="return confirm('Are you sure you want to remove this transaction?')">Remove</button>
+                  </form>
+                </div>
               </div>
             <?php endforeach; ?>
           <?php endif; ?>
         </section>
       </div>
 
-      <!-- Updated Charts Section - Now Vertical Stack -->
+      <!-- Charts Section -->
       <section class="charts-section">
         <h3>Financial Overview</h3>
         
         <div class="chart-container">
-    <canvas id="incomeExpenseChart"></canvas>
-  </div>
-  
-  <div class="chart-container">
-    <canvas id="savingsProgressChart"></canvas>
-  </div>
-  
-  <div class="chart-container">
-    <canvas id="savingsTrendChart"></canvas>
-  </div>
-</section>
+          <canvas id="incomeExpenseChart"></canvas>
+        </div>
+        
+        <div class="chart-container">
+          <canvas id="savingsProgressChart"></canvas>
+        </div>
+        
+        <div class="chart-container">
+          <canvas id="savingsTrendChart"></canvas>
+        </div>
+      </section>
     </main>
 
     <footer>
@@ -267,116 +287,117 @@ while ($row = $expenseQuery->fetchArray(SQLITE3_ASSOC)) {
   <script>
     // Common Chart Configuration
     const chartOptions = {
-  responsive: true,
-  maintainAspectRatio: false,
-  plugins: {
-    legend: {
-      position: 'bottom'
-    },
-    title: {
-      display: true,
-      font: {
-        size: 18,
-        weight: 'bold'
-      },
-      padding: {
-        top: 10,
-        bottom: 20
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: {
+          position: 'bottom'
+        },
+        title: {
+          display: true,
+          font: {
+            size: 18,
+            weight: 'bold'
+          },
+          padding: {
+            top: 10,
+            bottom: 20
+          }
+        }
       }
-    }
-  }
-};
+    };
 
     // Income vs Expenses Doughnut Chart
-const incomeExpenseChart = new Chart(
-  document.getElementById('incomeExpenseChart'),
-  {
-    type: 'doughnut',
-    data: {
-      labels: <?= json_encode(array_merge($incomeLabels, $expenseLabels)) ?>,
-      datasets: [{
-        label: 'Income and Expenses',
-        data: [
-          ...<?= json_encode($incomeAmounts) ?>,
-          ...<?= json_encode($expenseAmounts) ?>
-        ],
-        backgroundColor: [
-          '#27ae60', '#2ecc71', '#1abc9c', '#16a085',
-          '#e74c3c', '#c0392b', '#f39c12', '#d35400'
-        ],
-      }]
-    },
-    options: {
-      ...chartOptions,
-      plugins: {
-        ...chartOptions.plugins,
-        title: {
-          ...chartOptions.plugins.title,
-          text: 'Income & Expenses by Category' // Unique title
+    const incomeExpenseChart = new Chart(
+      document.getElementById('incomeExpenseChart'),
+      {
+        type: 'doughnut',
+        data: {
+          labels: <?= json_encode(array_merge($incomeLabels, $expenseLabels)) ?>,
+          datasets: [{
+            label: 'Income and Expenses',
+            data: [
+              ...<?= json_encode($incomeAmounts) ?>,
+              ...<?= json_encode($expenseAmounts) ?>
+            ],
+            backgroundColor: [
+              '#27ae60', '#2ecc71', '#1abc9c', '#16a085',
+              '#e74c3c', '#c0392b', '#f39c12', '#d35400'
+            ],
+          }]
+        },
+        options: {
+          ...chartOptions,
+          plugins: {
+            ...chartOptions.plugins,
+            title: {
+              ...chartOptions.plugins.title,
+              text: 'Income & Expenses by Category'
+            }
+          }
         }
       }
-    }
-  }
-);
+    );
 
-   // Savings Goal Progress Chart
-const savingsProgressChart = new Chart(
-  document.getElementById('savingsProgressChart'),
-  {
-    type: 'bar',
-    data: {
-      labels: ['Goal', 'Saved'],
-      datasets: [{
-        label: 'Savings Progress',
-        data: [<?= $savings_goal ?>, <?= $current_savings ?>],
-        backgroundColor: ['#f1c40f', '#2ecc71']
-      }]
-    },
-    options: {
-      ...chartOptions,
-      indexAxis: 'y',
-      plugins: {
-        ...chartOptions.plugins,
-        title: {
-          ...chartOptions.plugins.title,
-          text: 'Savings Goal Progress' // Unique title
+    // Savings Goal Progress Chart
+    const savingsProgressChart = new Chart(
+      document.getElementById('savingsProgressChart'),
+      {
+        type: 'bar',
+        data: {
+          labels: ['Goal', 'Saved'],
+          datasets: [{
+            label: 'Savings Progress',
+            data: [<?= $savings_goal ?>, <?= $current_savings ?>],
+            backgroundColor: ['#f1c40f', '#2ecc71']
+          }]
+        },
+        options: {
+          ...chartOptions,
+          indexAxis: 'y',
+          plugins: {
+            ...chartOptions.plugins,
+            title: {
+              ...chartOptions.plugins.title,
+              text: 'Savings Goal Progress'
+            }
+          }
         }
       }
-    }
-  }
-);
+    );
 
-// Savings Trend Line Chart
-const savingsTrendChart = new Chart(
-  document.getElementById('savingsTrendChart'),
-  {
-    type: 'line',
-    data: {
-      labels: <?= json_encode($dates) ?>,
-      datasets: [{
-        label: 'Savings Over Time',
-        data: <?= json_encode($amounts) ?>,
-        fill: true,
-        backgroundColor: 'rgba(26, 188, 156, 0.2)',
-        borderColor: '#1abc9c',
-        borderWidth: 2,
-        tension: 0.3,
-        pointRadius: 5,
-        pointBackgroundColor: '#1abc9c'
-      }]
-    },
-    options: {
-      ...chartOptions,
-      plugins: {
-        ...chartOptions.plugins,
-        title: {
-          ...chartOptions.plugins.title,
-          text: 'Savings Trend Over Time'
+    // Savings Trend Line Chart
+    const savingsTrendChart = new Chart(
+      document.getElementById('savingsTrendChart'),
+      {
+        type: 'line',
+        data: {
+          labels: <?= json_encode($dates) ?>,
+          datasets: [{
+            label: 'Savings Over Time',
+            data: <?= json_encode($amounts) ?>,
+            fill: true,
+            backgroundColor: 'rgba(26, 188, 156, 0.2)',
+            borderColor: '#1abc9c',
+            borderWidth: 2,
+            tension: 0.3,
+            pointRadius: 5,
+            pointBackgroundColor: '#1abc9c'
+          }]
+        },
+        options: {
+          ...chartOptions,
+          plugins: {
+            ...chartOptions.plugins,
+            title: {
+              ...chartOptions.plugins.title,
+              text: 'Savings Trend Over Time'
+            }
+          }
         }
       }
-    }
-  }
-);
+    );
+
     // Handle window resizing
     window.addEventListener('resize', function() {
       incomeExpenseChart.resize();
