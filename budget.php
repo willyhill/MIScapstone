@@ -150,19 +150,20 @@ while ($row = $expenseQuery->fetchArray(SQLITE3_ASSOC)) {
   <div class="budget-page">
     <header>
     <nav class="nav-bar">
-        <a href="index.html" class="logo">JCW Financials</a>
-        <ul class="nav-links">
-            <li><a href="index.html" class="nav-link">Home</a></li>
-        </ul>
-        <div class="profile-menu">
-            <img src="profile.jpg" alt="Profile" class="profile-pic" />
-            <div class="dropdown-menu">
-                <a href="account.html">Account</a>
-                <a href="settings.html">Settings</a>
-                <a href="logout.html">Logout</a>
-            </div>
+    <a href="index.php" class="logo">JCW Financials</a>
+    <ul class="nav-links">
+        <li><a href="index.php" class="nav-link">Home</a></li>
+    </ul>
+    <div class="profile-menu">
+        <img src="profile.jpg" alt="Profile" class="profile-pic" />
+        <div class="dropdown-menu">
+            <a href="account.html">Account</a>
+            <a href="settings.html">Settings</a>
+            <a href="logout.html">Logout</a>
         </div>
-    </nav>
+    </div>
+</nav>
+
 </header>
 
     <main>
