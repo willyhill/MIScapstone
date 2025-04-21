@@ -174,9 +174,9 @@ while ($row = $expenseQuery->fetchArray(SQLITE3_ASSOC)) {
         <div class="profile-menu">
           <img src="profile.jpg" alt="Profile" class="profile-pic" />
           <div class="dropdown-menu">
-            <a href="account.html">Account</a>
-            <a href="settings.html">Settings</a>
-            <a href="logout.html">Logout</a>
+            <a href="temp.php" style="color: #1abc9c; padding: 12px 16px; text-decoration: none; display: block;">Account</a>
+            <a href="settings.html" style="color: #1abc9c; padding: 12px 16px; text-decoration: none; display: block;">Settings</a>
+            <a href="logout.php" style="color: #1abc9c; padding: 12px 16px; text-decoration: none; display: block;">Logout</a>
           </div>
         </div>
       </nav>

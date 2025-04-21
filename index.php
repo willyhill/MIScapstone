@@ -7,7 +7,7 @@ $is_logged_in = isset($_SESSION['user_id']);
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>JCW Finance</title>
+    <title>JCW Financials</title>
     <style>
         /* Global Reset */
         * {
@@ -206,6 +206,15 @@ $is_logged_in = isset($_SESSION['user_id']);
     <footer>
         <p>Contact Us: <a href="mailto:help@JCWFinance.com" style="color: white;">help@JCWFinance.com</a></p>
     </footer>
+
+    <div class="profile-menu">
+        <img src="profile.jpg" alt="Profile" class="profile-pic" />
+        <div class="dropdown-menu">
+            <a href="temp.php" style="color: #1abc9c; padding: 12px 16px; text-decoration: none; display: block;">Account</a>
+            <a href="settings.html" style="color: #1abc9c; padding: 12px 16px; text-decoration: none; display: block;">Settings</a>
+            <a href="logout.php" style="color: #1abc9c; padding: 12px 16px; text-decoration: none; display: block;">Logout</a>
+        </div>
+    </div>
 </body>
 </html>
 
