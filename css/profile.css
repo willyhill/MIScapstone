@@ -257,6 +257,32 @@ close-button:hover {
   border-radius: 4px;
 }
 
+.account-details form {
+    margin-bottom: 20px;
+}
+
+.account-details input {
+    width: 80%;
+    padding: 8px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.account-details button {
+    padding: 10px 20px;
+    background-color: #1abc9c;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.account-details button:hover {
+    background-color: #16a085;
+}
+
 /* Advanced Settings */
 .advanced-settings {
   margin-top: 20px;

@@ -61,7 +61,7 @@
                 <div class="profile-menu">
                     <img src="profile.jpg" alt="Profile" class="profile-pic" id="profile-button" />
                     <div class="dropdown-menu" id="dropdown-menu">
-                        <a href="account.html">Account</a>
+                        <a href="Profile.php" style="color: #1abc9c; padding: 12px 16px; text-decoration: none; display: block;">Account</a>
                         <a href="settings.html">Settings</a>
                         <a href="logout.php">Logout</a>
                     </div>
@@ -98,6 +98,20 @@
                 
                 <label for="goal_preference">Goal Preference:</label>
                 <textarea id="goal_preference" name="goal_preference" readonly><?php echo htmlspecialchars($goal_preference); ?></textarea>
+
+                <!-- Change Username Section -->
+                <label for="change_username">Change Username:</label>
+                <form method="post" action="UpdateProfile.php">
+                    <input type="text" id="change_username" name="new_username" placeholder="Enter new username" required>
+                    <button type="submit" name="update_username">Update Username</button>
+                </form>
+
+                <!-- Change Password Section -->
+                <label for="change_password">Change Password:</label>
+                <form method="post" action="UpdateProfile.php">
+                    <input type="password" id="change_password" name="new_password" placeholder="Enter new password" required>
+                    <button type="submit" name="update_password">Update Password</button>
+                </form>
             </div>
             <div class="advanced-settings">
                 <p>Advanced Settings</p>
