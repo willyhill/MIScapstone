@@ -135,3 +135,80 @@ p {
   line-height: 1.5;
   margin-left: 40px;
 }
+
+/* Styling for the team member container */
+.team-member {
+  display: flex;
+  flex-direction: column; /* Stack image and text vertically */
+  align-items: center; /* Center-align content */
+  text-align: center; /* Center-align text */
+  margin: 20px; /* Add spacing between team members */
+  padding: 20px; /* Add padding inside the container */
+  background-color: #f9f9f9; /* Light background color */
+  border-radius: 8px; /* Rounded corners */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+  max-width: 300px; /* Limit the width of each team member card */
+  transition: transform 0.3s ease, box-shadow 0.3s ease; /* Smooth transition for hover effect */
+}
+
+/* Hover effect for the team member container */
+.team-member:hover {
+  transform: scale(1.05); /* Slightly enlarge the box */
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2); /* Add a deeper shadow */
+}
+
+/* Layout for the team members container */
+.team-container {
+  display: grid;
+  grid-template-columns: 1fr; /* Default to one column */
+  gap: 20px; /* Add spacing between items */
+  justify-items: center; /* Center-align items */
+  padding: 20px;
+}
+
+/* Desktop layout: Jennifer Pool on top, others stacked on the right */
+@media (min-width: 768px) {
+  .team-container {
+    grid-template-columns: 1fr 1fr; /* Two columns */
+    grid-template-rows: auto auto; /* Auto height for rows */
+    grid-template-areas:
+      "jennifer jennifer" /* Jennifer spans the top row */
+      "william churchill"; /* Stack William and Churchill below Jennifer */
+  }
+
+  .team-member:nth-child(1) {
+    grid-area: jennifer; /* Jennifer Pool spans the top row */
+  }
+
+  .team-member:nth-child(2) {
+    grid-area: william; /* William Li on the left in the second row */
+  }
+
+  .team-member:nth-child(3) {
+    grid-area: churchill; /* Churchill Gwan on the right in the second row */
+  }
+}
+
+/* Styling for the team member container */
+.team-member {
+  display: flex;
+  flex-direction: column; /* Stack image and text vertically */
+  align-items: center; /* Center-align content */
+  text-align: center; /* Center-align text */
+  margin: 20px; /* Add spacing between team members */
+  padding: 20px; /* Add padding inside the container */
+  background-color: #f9f9f9; /* Light background color */
+  border-radius: 8px; /* Rounded corners */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+  max-width: 300px; /* Limit the width of each team member card */
+}
+
+/* Styling for the team member image */
+.team-pic {
+  width: 140px; /* Set a fixed width for the image */
+  height: 170px; /* Set a fixed height for the image */
+  border-radius: 50%; /* Make the image circular */
+  object-fit: cover; /* Ensure the image maintains aspect ratio */
+  margin-bottom: 15px; /* Add spacing below the image */
+  border: 3px solid #3fb888; /* Add a border matching the theme color */
+}

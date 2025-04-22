@@ -12,6 +12,16 @@ $user_id = $_SESSION['user_id'];
 // Connect to DB
 $db = new SQLite3(__DIR__ . '/CapstoneDBbrowserFiles/capstoneDBdatabase.db');
 
+// Fetch the user's preferred currency
+$preferred_currency = $db->querySingle("SELECT preferred_currency FROM user_profiles WHERE user_id = $user_id");
+
+// Default to USD if no preference is set
+if (!$preferred_currency) {
+    $preferred_currency = 'USD';
+}
+
+error_log("Preferred currency for user ID $user_id: $preferred_currency");
+
 // Handle Form Submissions
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (isset($_POST['submit_income'])) {
@@ -167,16 +177,16 @@ while ($row = $expenseQuery->fetchArray(SQLITE3_ASSOC)) {
   <div class="budget-page">
     <header>
       <nav class="nav-bar">
-        <a href="index.html" class="logo">JCW Financials</a>
+        <a href="index.php" class="logo">JCW Financials</a>
         <ul class="nav-links">
-          <li><a href="index.html" class="nav-link">Home</a></li>
+          <li><a href="index.php" class="nav-link">Home</a></li>
         </ul>
         <div class="profile-menu">
           <img src="profile.jpg" alt="Profile" class="profile-pic" />
           <div class="dropdown-menu">
-            <a href="account.html">Account</a>
-            <a href="settings.html">Settings</a>
-            <a href="logout.html">Logout</a>
+            <a href="temp.php" style="color: #1abc9c; padding: 12px 16px; text-decoration: none; display: block;">Account</a>
+            <a href="settings.html" style="color: #1abc9c; padding: 12px 16px; text-decoration: none; display: block;">Settings</a>
+            <a href="logout.php" style="color: #1abc9c; padding: 12px 16px; text-decoration: none; display: block;">Logout</a>
           </div>
         </div>
       </nav>
@@ -227,8 +237,8 @@ while ($row = $expenseQuery->fetchArray(SQLITE3_ASSOC)) {
               </button>
             </div>
           </form>
-          <div class="goal-display">Your goal: $<?= number_format($savings_goal, 2) ?></div>
-          <div class="savings-needed-display">You need to save: $<?= number_format($savings_needed, 2) ?> more</div>
+          <div class="goal-display">Your goal: <?= $preferred_currency ?> <?= number_format($savings_goal, 2) ?></div>
+          <div class="savings-needed-display">You need to save: <?= $preferred_currency ?> <?= number_format($savings_needed, 2) ?> more</div>
         </section>
 
         <!-- Money Log Section -->
@@ -278,7 +288,7 @@ while ($row = $expenseQuery->fetchArray(SQLITE3_ASSOC)) {
     <footer>
       <div class="footer-links">
         <a href="About Us Wireframe.html" class="footer-link">About Us</a>
-        <a href="contact.html" class="footer-link">Contact</a>
+        <a href="mailto:help@JCWFinance.com" class="footer-link">Contact</a>
       </div>
       <p>&copy; 2023 JCW Financials. All rights reserved.</p>
     </footer>
