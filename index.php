@@ -186,7 +186,7 @@ $is_logged_in = isset($_SESSION['user_id']);
 
     <div class="container">
         <h1>JCW</h1>
-        <h1>Finance</h1>
+        <h1>Financials</h1>
 
         <!-- Loader Wrapper to center the loader -->
         <div class="loader-wrapper">
