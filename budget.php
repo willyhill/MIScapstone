@@ -278,7 +278,7 @@ while ($row = $expenseQuery->fetchArray(SQLITE3_ASSOC)) {
     <footer>
       <div class="footer-links">
         <a href="About Us Wireframe.html" class="footer-link">About Us</a>
-        <a href="contact.html" class="footer-link">Contact</a>
+        <a href="mailto:help@JCWFinance.com" class="footer-link">Contact</a>
       </div>
       <p>&copy; 2023 JCW Financials. All rights reserved.</p>
     </footer>
