@@ -12,6 +12,16 @@ $user_id = $_SESSION['user_id'];
 // Connect to DB
 $db = new SQLite3(__DIR__ . '/CapstoneDBbrowserFiles/capstoneDBdatabase.db');
 
+// Fetch the user's preferred currency
+$preferred_currency = $db->querySingle("SELECT preferred_currency FROM user_profiles WHERE user_id = $user_id");
+
+// Default to USD if no preference is set
+if (!$preferred_currency) {
+    $preferred_currency = 'USD';
+}
+
+error_log("Preferred currency for user ID $user_id: $preferred_currency");
+
 // Handle Form Submissions
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (isset($_POST['submit_income'])) {
@@ -227,8 +237,8 @@ while ($row = $expenseQuery->fetchArray(SQLITE3_ASSOC)) {
               </button>
             </div>
           </form>
-          <div class="goal-display">Your goal: $<?= number_format($savings_goal, 2) ?></div>
-          <div class="savings-needed-display">You need to save: $<?= number_format($savings_needed, 2) ?> more</div>
+          <div class="goal-display">Your goal: <?= $preferred_currency ?> <?= number_format($savings_goal, 2) ?></div>
+          <div class="savings-needed-display">You need to save: <?= $preferred_currency ?> <?= number_format($savings_needed, 2) ?> more</div>
         </section>
 
         <!-- Money Log Section -->

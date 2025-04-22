@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport"="width=device-width, initial-scale=1.0">
     <title>JCW Financials - Profile</title>
     <link rel="stylesheet" href="css/profile.css">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
@@ -91,7 +91,6 @@
                         </div>
                         <span class="label-text">Switch Currency</span>
                     </label>
-                    <button type="submit" class="toggle-submit">Apply</button>
                 </form>
                 
                 <label for="financial_preferences">Financial Preferences:</label>
@@ -113,19 +112,32 @@
                 };
             },
             methods: {
-                updateCurrency() {
+                toggleCurrency() {
+                    this.currency = this.currency === 'USD' ? 'CAD' : 'USD';
+
                     // Send the updated currency to the server via an AJAX request
-                    fetch('update_currency.php', {
+                    fetch('UpdateCurrency.php', {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json'
                         },
                         body: JSON.stringify({ currency: this.currency })
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            console.log('Currency updated successfully');
+                        } else {
+                            console.error('Error updating currency:', data.error);
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
                     });
-                },
-                toggleCurrency() {
-                    this.currency = this.currency === 'USD' ? 'CAD' : 'USD';
                 }
+            },
+            mounted() {
+                console.log('Current currency:', this.currency);
             }
         });
 
