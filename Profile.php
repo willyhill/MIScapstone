@@ -106,9 +106,6 @@
                     <button type="submit" name="update_password">Update Password</button>
                 </form>
             </div>
-            <div class="advanced-settings">
-                <p>Advanced Settings</p>
-            </div>
         </div>
     </div>
     <script>
