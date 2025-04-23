@@ -59,11 +59,10 @@
                     <li><button class="nav-button"><a href="budget.php">Budget Page</a></button></li>
                 </ul>
                 <div class="profile-menu">
-                    <img src="profile.jpg" alt="Profile" class="profile-pic" id="profile-button" />
-                    <div class="dropdown-menu" id="dropdown-menu">
+                    <img src="profile.jpg" alt="Profile" class="profile-pic" />
+                    <div class="dropdown-menu">
                         <a href="Profile.php" style="color: #1abc9c; padding: 12px 16px; text-decoration: none; display: block;">Account</a>
-                        <a href="settings.html">Settings</a>
-                        <a href="logout.php">Logout</a>
+                        <a href="logout.php" style="color: #1abc9c; padding: 12px 16px; text-decoration: none; display: block;">Logout</a>
                     </div>
                 </div>
             </nav>
