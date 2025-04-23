@@ -13,21 +13,49 @@ $db = new SQLite3(__DIR__ . '/CapstoneDBbrowserFiles/capstoneDBdatabase.db');
 // Get the user ID from the session
 $user_id = $_SESSION['user_id'];
 
+// Debugging: Check if the user ID is set
+error_log("User ID: $user_id");
+
 // Handle username update
 if (isset($_POST['update_username'])) {
     $new_username = trim($_POST['new_username']);
 
+    // Debugging: Check if the new username is received
+    error_log("New username: $new_username");
+
     if (!empty($new_username)) {
+        // Prepare the SQL statement
         $stmt = $db->prepare('UPDATE user_profiles SET username = :username WHERE user_id = :user_id');
         $stmt->bindValue(':username', $new_username, SQLITE3_TEXT);
         $stmt->bindValue(':user_id', $user_id, SQLITE3_INTEGER);
-        $stmt->execute();
 
-        // Update the session username
-        $_SESSION['username'] = $new_username;
+        // Execute the query and check for errors
+        if ($stmt->execute()) {
+            // Debugging: Log success
+            error_log("Username updated successfully for user ID: $user_id");
 
-        // Redirect back to the profile page with a success message
-        header("Location: Profile.php?success=username_updated");
+            // Update the session username
+            $_SESSION['username'] = $new_username;
+
+            // Redirect back to the profile page with a success message
+            header("Location: Profile.php?success=username_updated");
+            exit();
+        } else {
+            // Debugging: Log an error if the query fails
+            error_log("Failed to update username for user ID: $user_id");
+            echo '<script>
+                alert("Failed to update username. Please try again.");
+                window.location.href = "Profile.php";
+            </script>';
+            exit();
+        }
+    } else {
+        // Debugging: Log an error if the username is empty
+        error_log("Empty username provided for user ID: $user_id");
+        echo '<script>
+            alert("Username cannot be empty.");
+            window.location.href = "Profile.php";
+        </script>';
         exit();
     }
 }

@@ -92,12 +92,6 @@
                         <span class="label-text">Switch Currency</span>
                     </label>
                 </form>
-                
-                <label for="financial_preferences">Financial Preferences:</label>
-                <textarea id="financial_preferences" name="financial_preferences" readonly><?php echo htmlspecialchars($financial_preferences); ?></textarea>
-                
-                <label for="goal_preference">Goal Preference:</label>
-                <textarea id="goal_preference" name="goal_preference" readonly><?php echo htmlspecialchars($goal_preference); ?></textarea>
 
                 <!-- Change Username Section -->
                 <label for="change_username">Change Username:</label>
