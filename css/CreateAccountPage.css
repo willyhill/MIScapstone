@@ -166,6 +166,12 @@
   background-color: #fff;
   margin: 1rem 0 0.5rem;
   width: 100%;
+  background-color: #f5f5f5; /* Match the background color */
+  padding: 20px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Optional shadow for better appearance */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .input {
@@ -213,6 +219,34 @@
 
 .form button:hover {
   background-color: #005ce6;
+}
+
+.create-account-container {
+    text-align: center;
+    margin-top: 20px;
+}
+
+.create-account-button {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: #1abc9c; /* Green background */
+    color: white;
+    text-decoration: none;
+    border-radius: 4px;
+    font-size: 16px;
+    transition: background-color 0.3s ease;
+    margin-top: 10px; /* Add spacing above the button */
+}
+
+.create-account-button:hover {
+    background-color: #16a085; /* Darker green on hover */
+}
+
+/* Center the "Don't have an account?" text */
+.create-account-container p {
+    margin: 10px 0 5px;
+    font-size: 14px;
+    color: #333;
 }
 
 /* Media query for screens smaller than 768px (mobile devices) */

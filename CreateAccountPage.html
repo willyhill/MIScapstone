@@ -7,6 +7,32 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link href="css/CreateAccountPage.css" rel="stylesheet">
+  <style>
+    /* Style for the Create Account Button */
+    .create-account-button {
+        display: inline-block;
+        padding: 10px 20px;
+        background-color: #1abc9c; /* Match the Login button color */
+        color: white;
+        text-decoration: none;
+        border-radius: 4px;
+        font-size: 16px;
+        transition: background-color 0.3s ease;
+        margin-top: 10px; /* Add spacing above the button */
+    }
+
+    .create-account-button:hover {
+        background-color: #16a085; /* Match the hover effect of the Login button */
+    }
+
+    /* Ensure the background for the login section extends */
+    .form-container {
+        background-color: #f5f5f5; /* Match the background color */
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Optional shadow for better appearance */
+    }
+  </style>
 </head>
 <body>
   <div class="Create Account Page">
@@ -41,18 +67,22 @@
       </section>
       <section id="section2"> 
         <div class="form-container">
-          <form class="form" action="create_account.php" method="POST">
-            <span class="title">Create Your Account</span>
-            <div class="form-container">
-              <input type="email" class="input" placeholder="Email" name="email" required>
-              <input type="text" class="input" placeholder="Username" name="username" required>
-              <input type="password" class="input" placeholder="Password" name="password" required>
-            </div>
-            <button type="submit">Create Account</button>
+          <form class="form" action="login.php" method="POST">
+            <span class="title">Welcome, Login!</span>
+
+            <!-- Email Input -->
+            <input type="email" class="input" placeholder="Email" name="email" required>
+
+            <!-- Password Input -->
+            <input type="password" class="input" placeholder="Password" name="password" required>
+
+            <!-- Submit Button -->
+            <button type="submit" class="submit-button">Login</button>
           </form>
-          <div class="form-section">
-            <p>Already have an account? <a href="LoginAccountPage.html">Sign In</a> </p>
-          </div>
+
+          <!-- Create Account Button -->
+          <p>Don't have an account?</p>
+          <a href="CreateAccountPage.html" class="create-account-button">Create Account</a>
         </div>
       </section>
     </main>
