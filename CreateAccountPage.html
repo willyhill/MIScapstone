@@ -67,22 +67,18 @@
       </section>
       <section id="section2"> 
         <div class="form-container">
-          <form class="form" action="login.php" method="POST">
-            <span class="title">Welcome, Login!</span>
-
-            <!-- Email Input -->
-            <input type="email" class="input" placeholder="Email" name="email" required>
-
-            <!-- Password Input -->
-            <input type="password" class="input" placeholder="Password" name="password" required>
-
-            <!-- Submit Button -->
-            <button type="submit" class="submit-button">Login</button>
+          <form class="form" action="create_account.php" method="POST">
+            <span class="title">Create Your Account</span>
+            <div class="form-container">
+              <input type="email" class="input" placeholder="Email" name="email" required>
+              <input type="text" class="input" placeholder="Username" name="username" required>
+              <input type="password" class="input" placeholder="Password" name="password" required>
+            </div>
+            <button type="submit" class="create-account-button">Create Account</button>
           </form>
-
-          <!-- Create Account Button -->
-          <p>Don't have an account?</p>
-          <a href="CreateAccountPage.html" class="create-account-button">Create Account</a>
+          <div class="form-section">
+            <p>Already have an account? <a href="LoginAccountPage.html">Sign In</a> </p>
+          </div>
         </div>
       </section>
     </main>
